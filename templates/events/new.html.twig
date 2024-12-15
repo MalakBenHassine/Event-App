@@ -1,0 +1,40 @@
+{% extends 'base.html.twig' %}
+
+{% block title %}Create Event{% endblock %}
+
+{% block body %}
+    <h1 class="text-center mb-4">Create New Event</h1>
+
+    {{ form_start(formE, {'attr': {'class': 'custom-event-form'}}) }}
+    <div class="container">
+        <div class="row mb-3">
+            <div class="col-md-6">
+                {{ form_row(formE.nom) }}
+            </div>
+            <div class="col-md-6">
+                {{ form_row(formE.date) }}
+            </div>
+        </div>
+
+        <div class="row mb-3">
+            <div class="col-md-12">
+                {{ form_row(formE.local) }}
+            </div>
+        </div>
+
+        <div class="row mb-3">
+            <div class="col-md-12">
+                {{ form_row(formE.description) }}
+            </div>
+        </div>
+
+        <div class="row mb-3">
+            <div class="col-md-12 text-center">
+                {{ form_widget(formE.save) }}
+            </div>
+        </div>
+    </div>
+    {{ form_end(formE) }}
+
+{% endblock %}
+

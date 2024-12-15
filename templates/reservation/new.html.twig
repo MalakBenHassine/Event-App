@@ -1,0 +1,78 @@
+{% extends 'base.html.twig' %}
+
+{% block title %}Events List{% endblock %}
+
+{% block body %}
+    <div class="container mt-5">
+        <h1 class="text-center mb-4">Event List</h1>
+
+        {# Filter Form #}
+        <div class="card mb-4">
+            <div class="card-header">
+                <h5 class="mb-0">Filter Events</h5>
+            </div>
+            <div class="card-body">
+                <form method="get" action="{{ path('app_event_filter') }}" class="row g-3">
+                    <div class="col-md-6">
+                        <label for="field" class="form-label">Filter by</label>
+                        <select name="field" id="field" class="form-select">
+                            <option value="nom" {% if field == 'nom' %}selected{% endif %}>Name</option>
+                            <option value="description" {% if field == 'description' %}selected{% endif %}>Description</option>
+                            <option value="localisation" {% if field == 'localisation' %}selected{% endif %}>Location</option>
+                            <option value="date" {% if field == 'date' %}selected{% endif %}>Date</option>
+                            <option value="Category" {% if field == 'Category' %}selected{% endif %}>Category</option>
+                        </select>
+                    </div>
+
+                    <div class="col-md-6">
+                        <label for="value" class="form-label">Search Value</label>
+                        <input type="text" name="value" id="value" class="form-control" value="{{ value|default('') }}">
+                    </div>
+                    <div class="col-12 text-end">
+                        <button type="submit" class="btn btn-primary">Filter</button>
+                        <a href="{{ path('app_event') }}" class="btn btn-secondary">Reset</a>
+                    </div>
+                </form>
+            </div>
+        </div>
+
+        {# Events Table #}
+        {% if events is empty %}
+            <div class="alert alert-warning text-center">No events match your search criteria.</div>
+        {% else %}
+            <table class="table table-striped table-hover">
+                <thead class="table-dark">
+                <tr>
+                    <th>ID</th>
+                    <th>Name</th>
+                    <th>Date</th>
+                    <th>Location</th>
+                    <th>Description</th>
+                    <th>Category</th>
+                    <th>Price (€)</th>
+                </tr>
+                </thead>
+                <tbody>
+                {% for event in events %}
+                    <tr>
+                        <td>{{ event.id }}</td>
+                        <td>{{ event.nom }}</td>
+                        <td>{{ event.date|date('Y-m-d') }}</td>
+                        <td>{{ event.localisation }}</td>
+                        <td>{{ event.description }}</td>
+                        <td>{{ event.category }}</td>
+                        <td>{{ event.price }}</td>
+                        <td>
+                            {% if event.id in registeredEvents %}
+                                Reserved
+                            {% else %}
+                                <a href="{{ path('event_register', {'id': event.id}) }}" class="btn btn-primary">Reserve</a>
+                            {% endif %}
+                        </td>
+                    </tr>
+                {% endfor %}
+                </tbody>
+            </table>
+        {% endif %}
+    </div>
+{% endblock %}
