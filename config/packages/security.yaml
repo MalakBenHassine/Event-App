@@ -1,0 +1,33 @@
+security:
+    # Configuration des hashers pour les mots de passe
+    password_hashers:
+        Symfony\Component\Security\Core\User\PasswordAuthenticatedUserInterface: 'auto'
+
+    # Fournisseurs d'utilisateurs
+    providers:
+        app_user_provider:
+            entity:
+                class: App\Entity\User
+                property: email  # Correspond au champ utilisé pour l'authentification (email)
+
+    # Pare-feu (firewalls)
+    firewalls:
+        dev:
+            pattern: ^/(_(profiler|wdt)|css|images|js)/
+            security: false
+
+        main:
+            lazy: true
+            provider: app_user_provider
+            custom_authenticator: App\Security\AppCustomAuthentication
+            logout:
+                path: app_logout            # Route pour se déconnecter
+                target: app_login           # Redirection après déconnexion
+
+    # Contrôle d'accès
+    access_control:
+        - { path: ^/admin, roles: ROLE_ADMIN }   # Accès à /admin réservé aux administrateurs
+        - { path: ^/profile, roles: ROLE_USER } # Accès à /profile réservé aux utilisateurs authentifiés
+        - { path: ^/organizer, roles: ROLE_ORGANIZER }
+        - { path: ^/locator, roles: ROLE_LOCATOR }
+        - { path: ^/user, roles: ROLE_USER }

@@ -1,0 +1,16 @@
+{% extends 'base.html.twig' %}
+
+{% block title %}Home{% endblock %}
+
+{% block body %}
+    {% if app.user %}
+    {% if app.user.roles==["ROLE_USER"] %}
+        <div>User</div>
+
+        <main>
+            {% block bodyUser %}
+            {% endblock %}
+        </main>
+    {% endif %}
+    {% endif %}
+{% endblock %}
