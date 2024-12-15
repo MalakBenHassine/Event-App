@@ -44,10 +44,6 @@ class User implements UserInterface, PasswordAuthenticatedUserInterface
     #[ORM\Column]
     private bool $isVerified = false;
 
-    public function __construct()
-    {
-        $this->reservations = new ArrayCollection();
-    }
 
     /**
      * @var Collection<int, Reservation>
@@ -138,17 +134,8 @@ class User implements UserInterface, PasswordAuthenticatedUserInterface
         return $this;
     }
 
-    public function removeReservation(Reservation $reservation): static
-    {
-        if ($this->reservations->removeElement($reservation)) {
-            // set the owning side to null (unless already changed)
-            if ($reservation->getUser() === $this) {
-                $reservation->setUser(null);
-            }
-        }
 
-        return $this;
-    }
+
 
     public function eraseCredentials()
     {
@@ -193,15 +180,7 @@ class User implements UserInterface, PasswordAuthenticatedUserInterface
         return $this->reservation;
     }
 
-    public function addReservation(Reservation $reservation): static
-    {
-        if (!$this->reservation->contains($reservation)) {
-            $this->reservation->add($reservation);
-            $reservation->setUser($this);
-        }
 
-        return $this;
-    }
 
     public function removeReservation(Reservation $reservation): static
     {

@@ -13,7 +13,6 @@ use Symfony\Component\Routing\Attribute\Route;
 use Symfony\Component\Security\Http\Attribute\IsGranted;
 
 #[Route('/local')]
-#[IsGranted('ROLE_LOCATOR')]
 final class LocalController extends AbstractController
 {
     #[Route(name: 'app_local_index', methods: ['GET'])]
@@ -23,6 +22,7 @@ final class LocalController extends AbstractController
             'locals' => $localRepository->findAll(),
         ]);
     }
+    #[IsGranted('ROLE_LOCATOR')]
 
     #[Route('/new', name: 'app_local_new', methods: ['GET', 'POST'])]
     public function new(Request $request, EntityManagerInterface $entityManager): Response
@@ -51,6 +51,7 @@ final class LocalController extends AbstractController
             'local' => $local,
         ]);
     }
+    #[IsGranted('ROLE_LOCATOR')]
 
     #[Route('/{id}/edit', name: 'app_local_edit', methods: ['GET', 'POST'])]
     public function edit(Request $request, Local $local, EntityManagerInterface $entityManager): Response
@@ -69,6 +70,7 @@ final class LocalController extends AbstractController
             'form' => $form,
         ]);
     }
+    #[IsGranted('ROLE_LOCATOR')]
 
     #[Route('/{id}', name: 'app_local_delete', methods: ['POST'])]
     public function delete(Request $request, Local $local, EntityManagerInterface $entityManager): Response

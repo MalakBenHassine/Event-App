@@ -19,13 +19,7 @@ security:
         main:
             lazy: true
             provider: app_user_provider
-            form_login:
-                login_path: app_login       # Route pour afficher la page de connexion
-                check_path: app_login       # Route pour traiter le formulaire de connexion
-                username_parameter: email   # Nom du champ utilisé pour l'email
-                password_parameter: password # Nom du champ utilisé pour le mot de passe
-                enable_csrf: true           # Sécurité CSRF activée
-                default_target_path: app_event
+            custom_authenticator: App\Security\AppCustomAuthentication
             logout:
                 path: app_logout            # Route pour se déconnecter
                 target: app_login           # Redirection après déconnexion

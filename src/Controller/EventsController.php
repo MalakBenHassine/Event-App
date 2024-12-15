@@ -18,6 +18,7 @@ use Symfony\Component\Form\Extension\Core\Type\SubmitType;
 
 class EventsController extends AbstractController
 {
+
     #[Route('/events', name: 'app_event')]
     public function listEvents(EventsRepository $er): Response
     {
