@@ -57,10 +57,17 @@ class User implements UserInterface, PasswordAuthenticatedUserInterface
     #[ORM\ManyToMany(targetEntity: Events::class, inversedBy: 'users')]
     private Collection $event;
 
+    /**
+     * @var Collection<int, Local>
+     */
+    #[ORM\OneToMany(targetEntity: Local::class, mappedBy: 'user')]
+    private Collection $locaux;
+
     public function __construct()
     {
         $this->reservation = new ArrayCollection();
         $this->event = new ArrayCollection();
+        $this->locaux = new ArrayCollection();
     }
 
     public function getId(): ?int
@@ -214,6 +221,36 @@ class User implements UserInterface, PasswordAuthenticatedUserInterface
     public function removeEvent(Events $event): static
     {
         $this->event->removeElement($event);
+
+        return $this;
+    }
+
+    /**
+     * @return Collection<int, Local>
+     */
+    public function getLocaux(): Collection
+    {
+        return $this->locaux;
+    }
+
+    public function addLocaux(Local $locaux): static
+    {
+        if (!$this->locaux->contains($locaux)) {
+            $this->locaux->add($locaux);
+            $locaux->setUser($this);
+        }
+
+        return $this;
+    }
+
+    public function removeLocaux(Local $locaux): static
+    {
+        if ($this->locaux->removeElement($locaux)) {
+            // set the owning side to null (unless already changed)
+            if ($locaux->getUser() === $this) {
+                $locaux->setUser(null);
+            }
+        }
 
         return $this;
     }
