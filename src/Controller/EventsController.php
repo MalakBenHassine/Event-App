@@ -2,6 +2,7 @@
 
 namespace App\Controller;
 
+use App\Security\EmailVerifier;
 use Doctrine\DBAL\Types\Types;
 
 use App\Entity\Events;
@@ -66,6 +67,17 @@ class EventsController extends AbstractController
         return $this->render('events/new.html.twig', [
             'formE' => $form->createView(),
         ]);
+    }
+    #[Route('/send-reminder', name: 'app_send_reminder')]
+    public function sendReminder(EmailVerifier $emailService): Response
+    {
+        $userEmail = 'user@example.com';
+        $eventName = 'Symfony Workshop';
+        $eventDate = new \DateTime('2024-09-10 10:00:00');
+
+        $emailService->sendEventReminder($userEmail, $eventName, $eventDate);
+
+        return new Response('Reminder email sent!');
     }
 
 
