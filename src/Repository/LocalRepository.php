@@ -41,5 +41,12 @@ class LocalRepository extends ServiceEntityRepository
     //        ;
     //    }
 
-
+    public function findAvailableLocals(): array
+    {
+        return $this->createQueryBuilder('l')
+            ->andWhere('l.isAvailable = :available')
+            ->setParameter('available', true)
+            ->getQuery()
+            ->getResult();
+    }
 }
