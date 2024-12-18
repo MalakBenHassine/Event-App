@@ -77,9 +77,11 @@ class Local
     #[ORM\OneToMany(targetEntity: Events::class, mappedBy: 'local')]
     private Collection $events;
 
-    #[ORM\ManyToOne(inversedBy: 'local')]
+
+
+    #[ORM\ManyToOne(inversedBy: 'locaux')]
     #[ORM\JoinColumn(nullable: false)]
-    private ?Louer $louer = null;
+    private ?User $user = null;
 
     public function __construct()
     {
@@ -158,19 +160,18 @@ class Local
         return $this;
     }
 
-    public function getLouer(): ?Louer
+
+
+
+    public function getUser(): ?User
     {
-        return $this->louer;
+        return $this->user;
     }
 
-    public function setLouer(?Louer $louer): static
+    public function setUser(?User $user): static
     {
-        $this->louer = $louer;
+        $this->user = $user;
 
         return $this;
-    }
-    public function __toString(): string
-    {
-        return $this->name;
     }
 }
