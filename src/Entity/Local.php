@@ -24,62 +24,17 @@ class Local
     #[ORM\Column]
     private ?int $capacite = null;
 
-
-
-    #[ORM\Column(type: 'boolean')]
-    private bool $isAvailable = true;
-
-    #[ORM\Column(type: 'text', nullable: true)]
-    private ?string $description = null;
-
-    #[ORM\Column(type: 'decimal', precision: 10, scale: 2, nullable: true)]
-    private ?float $price = null;
-
-
-
-
-    public function getDescription(): ?string
-    {
-        return $this->description;
-    }
-
-    public function setDescription(?string $description): self
-    {
-        $this->description = $description;
-        return $this;
-    }
-
-    public function getPrice(): ?float
-    {
-        return $this->price;
-    }
-
-    public function setPrice(?float $price): self
-    {
-        $this->price = $price;
-        return $this;
-    }
-
-    public function isAvailable(): bool
-    {
-        return $this->isAvailable;
-    }
-
-    public function setIsAvailable(bool $isAvailable): self
-    {
-        $this->isAvailable = $isAvailable;
-        return $this;
-    }
-
     /**
      * @var Collection<int, Events>
      */
     #[ORM\OneToMany(targetEntity: Events::class, mappedBy: 'local')]
     private Collection $events;
 
-    #[ORM\ManyToOne(inversedBy: 'local')]
+
+
+    #[ORM\ManyToOne(inversedBy: 'locaux')]
     #[ORM\JoinColumn(nullable: false)]
-    private ?Louer $louer = null;
+    private ?User $user = null;
 
     public function __construct()
     {
@@ -158,19 +113,18 @@ class Local
         return $this;
     }
 
-    public function getLouer(): ?Louer
+
+
+
+    public function getUser(): ?User
     {
-        return $this->louer;
+        return $this->user;
     }
 
-    public function setLouer(?Louer $louer): static
+    public function setUser(?User $user): static
     {
-        $this->louer = $louer;
+        $this->user = $user;
 
         return $this;
-    }
-    public function __toString(): string
-    {
-        return $this->name;
     }
 }

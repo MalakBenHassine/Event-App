@@ -8,6 +8,7 @@ use App\Repository\LocalRepository;
 use Doctrine\ORM\EntityManagerInterface;
 use Symfony\Bundle\FrameworkBundle\Controller\AbstractController;
 use Symfony\Component\HttpFoundation\Request;
+use Symfony\Bundle\SecurityBundle\Security;
 use Symfony\Component\HttpFoundation\Response;
 use Symfony\Component\Routing\Attribute\Route;
 use Symfony\Component\Security\Http\Attribute\IsGranted;
@@ -25,9 +26,18 @@ final class LocalController extends AbstractController
     #[IsGranted('ROLE_LOUEUR')]
 
     #[Route('/new', name: 'app_local_new', methods: ['GET', 'POST'])]
-    public function new(Request $request, EntityManagerInterface $entityManager): Response
+    public function new(Request $request, EntityManagerInterface $entityManager, Security $security): Response
     {
+        $user = $security->getUser();
+
+        // Vérifie si l'utilisateur possède le rôle "ROLE_LOCATOR"
+        if (!$this->isGranted('ROLE_LOUEUR')) {
+            throw $this->createAccessDeniedException('Vous n’avez pas les droits pour créer un Local.');
+        }
+
         $local = new Local();
+        $local->setUser($user);
+
         $form = $this->createForm(LocalType::class, $local);
         $form->handleRequest($request);
 
@@ -82,20 +92,4 @@ final class LocalController extends AbstractController
 
         return $this->redirectToRoute('app_local_index', [], Response::HTTP_SEE_OTHER);
     }
-
-    #[Route('/local/available', name: 'app_local_available', methods: ['GET'])]
-    public function availableLocals(LocalRepository $localRepository): Response
-    {
-        $availableLocals = $localRepository->findAvailableLocals(); // Récupérer les locaux disponibles
-
-        dump($availableLocals); // Vérifiez les données dans la barre de débogage Symfony
-
-        return $this->render('local/available.html.twig', [
-            'locals' => $availableLocals,
-        ]);
-    }
-
-
-
-
 }
