@@ -92,4 +92,20 @@ final class LocalController extends AbstractController
 
         return $this->redirectToRoute('app_local_index', [], Response::HTTP_SEE_OTHER);
     }
+
+    #[Route('/local/available', name: 'app_local_available', methods: ['GET'])]
+    public function availableLocals(LocalRepository $localRepository): Response
+    {
+        $availableLocals = $localRepository->findAvailableLocals(); // Récupérer les locaux disponibles
+
+        dump($availableLocals); // Vérifiez les données dans la barre de débogage Symfony
+
+        return $this->render('local/available.html.twig', [
+            'locals' => $availableLocals,
+        ]);
+    }
+
+
+
+
 }

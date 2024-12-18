@@ -1,0 +1,19 @@
+{% block body %}
+    <h1>Locaux Disponibles à Louer</h1>
+
+    {% if locals is empty %}
+        <p>Aucun local n'est disponible pour le moment.</p>
+    {% else %}
+        <ul>
+            {% for local in locals %}
+                <li>
+                    <strong>Nom :</strong> {{ local.name }} <br>
+                    <strong>Adresse :</strong> {{ local.adr }} <br>
+                    <strong>Capacité :</strong> {{ local.capacite }}
+                    {{ local.name }} - {{ local.description ? local.description : 'Aucune description disponible' }} <br>
+                    <strong>Prix :</strong> {{ local.price }}
+                </li>
+            {% endfor %}
+        </ul>
+    {% endif %}
+{% endblock %}

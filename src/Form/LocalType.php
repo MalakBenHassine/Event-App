@@ -15,6 +15,11 @@ class LocalType extends AbstractType
             ->add('name')
             ->add('adr')
             ->add('capacite')
+            ->add('description')
+            ->add('price')
+
+
+
         ;
     }
 

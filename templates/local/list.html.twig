@@ -1,0 +1,37 @@
+{% extends 'base.html.twig' %}
+
+{% block title %}Liste des locaux{% endblock %}
+
+{% block body %}
+    <h1>Liste des locaux</h1>
+
+    <table class="table">
+        <thead>
+        <tr>
+            <th>ID</th>
+            <th>Nom</th>
+            <th>Adresse</th>
+            <th>Capacité</th>
+            <th>Actions</th>
+        </tr>
+        </thead>
+        <tbody>
+        {% for local in locals %}
+            <tr>
+                <td>{{ local.id }}</td>
+                <td>{{ local.name }}</td>
+                <td>{{ local.adr }}</td>
+                <td>{{ local.capacite }}</td>
+                <td>
+                    <a href="#" class="btn btn-primary btn-sm">Modifier</a>
+                    <a href="#" class="btn btn-danger btn-sm">Supprimer</a>
+                </td>
+            </tr>
+        {% else %}
+            <tr>
+                <td colspan="5">Aucun local trouvé.</td>
+            </tr>
+        {% endfor %}
+        </tbody>
+    </table>
+{% endblock %}

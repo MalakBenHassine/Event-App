@@ -58,16 +58,16 @@ class User implements UserInterface, PasswordAuthenticatedUserInterface
     private Collection $event;
 
     /**
-     * @var Collection<int, Local>
+     * @var Collection<int, PasswordResetToken>
      */
-    #[ORM\OneToMany(targetEntity: Local::class, mappedBy: 'user')]
-    private Collection $locaux;
+    #[ORM\OneToMany(targetEntity: PasswordResetToken::class, mappedBy: 'user', orphanRemoval: true)]
+    private Collection $passwordResetTokens;
 
     public function __construct()
     {
         $this->reservation = new ArrayCollection();
         $this->event = new ArrayCollection();
-        $this->locaux = new ArrayCollection();
+        $this->passwordResetTokens = new ArrayCollection();
     }
 
     public function getId(): ?int
@@ -152,7 +152,7 @@ class User implements UserInterface, PasswordAuthenticatedUserInterface
     public function getUserIdentifier(): string
     {
         // TODO: Implement getUserIdentifier() method.
-        return "null";
+        return $this->email;
     }
 
     public function getPassword(): ?string
@@ -226,29 +226,29 @@ class User implements UserInterface, PasswordAuthenticatedUserInterface
     }
 
     /**
-     * @return Collection<int, Local>
+     * @return Collection<int, PasswordResetToken>
      */
-    public function getLocaux(): Collection
+    public function getPasswordResetTokens(): Collection
     {
-        return $this->locaux;
+        return $this->passwordResetTokens;
     }
 
-    public function addLocaux(Local $locaux): static
+    public function addPasswordResetToken(PasswordResetToken $passwordResetToken): static
     {
-        if (!$this->locaux->contains($locaux)) {
-            $this->locaux->add($locaux);
-            $locaux->setUser($this);
+        if (!$this->passwordResetTokens->contains($passwordResetToken)) {
+            $this->passwordResetTokens->add($passwordResetToken);
+            $passwordResetToken->setUser($this);
         }
 
         return $this;
     }
 
-    public function removeLocaux(Local $locaux): static
+    public function removePasswordResetToken(PasswordResetToken $passwordResetToken): static
     {
-        if ($this->locaux->removeElement($locaux)) {
+        if ($this->passwordResetTokens->removeElement($passwordResetToken)) {
             // set the owning side to null (unless already changed)
-            if ($locaux->getUser() === $this) {
-                $locaux->setUser(null);
+            if ($passwordResetToken->getUser() === $this) {
+                $passwordResetToken->setUser(null);
             }
         }
 
