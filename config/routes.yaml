@@ -4,14 +4,3 @@ controllers:
         namespace: App\Controller
     type: attribute
 
-app_event:
-  path: /events
-  controller: App\Controller\EventsController::liste-des-events
-
-app_new:
-  path: /events/new
-  controller: App\Controller\EventsController::new
-
-app_local:
-  path: /local/new
-  controller: App\Controller\LocalController::local

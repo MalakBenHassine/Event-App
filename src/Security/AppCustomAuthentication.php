@@ -54,6 +54,8 @@ class AppCustomAuthentication extends AbstractLoginFormAuthenticator
         if(in_array("ROLE_ORGANIZER",$user->getRoles(),true)){
             return new RedirectResponse($this->urlGenerator->generate('app_new'));
         }
+
+
         return new RedirectResponse($this->urlGenerator->generate('app_local'));
 
 

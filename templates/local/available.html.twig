@@ -1,0 +1,24 @@
+{% extends 'base.html.twig' %}
+
+{% block title %}Locaux Disponibles{% endblock %}
+
+{% block body %}
+    <h1>Liste des Locaux Disponibles</h1>
+
+    {% if locals is empty %}
+        <p>Aucun local disponible pour le moment.</p>
+    {% else %}
+        <ul>
+            {% for local in locals %}
+                <li>
+                    <strong>{{ local.name }}</strong><br>
+                    Adresse : {{ local.adr }}<br>
+                    Capacité : {{ local.capacite }} personnes<br>
+                    Prix : {{ local.price ? local.price ~ ' €' : 'Non spécifié' }}<br>
+                    Description : {{ local.description|default('Aucune description') }}
+                </li>
+                <hr>
+            {% endfor %}
+        </ul>
+    {% endif %}
+{% endblock %}
