@@ -1,0 +1,50 @@
+{% extends 'base.html.twig' %}
+
+{% block title %}Réservation pour {{ event.nom }}{% endblock %}
+
+{% block body %}
+    <div class="container my-5">
+        <h1 class="text-center text-primary mb-4">Réservation pour {{ event.nom }}</h1>
+
+        {# Affichage des messages de flash pour la réussite ou l'erreur #}
+        {% for message in app.flashes('success') %}
+            <div class="alert alert-success text-center">
+                {{ message }}
+            </div>
+        {% endfor %}
+        {% for message in app.flashes('error') %}
+            <div class="alert alert-danger text-center">
+                {{ message }}
+            </div>
+        {% endfor %}
+
+        <div class="card shadow-sm mt-4">
+            <div class="card-body">
+                <h5 class="card-title text-center mb-3">Détails de l'événement</h5>
+                <p><strong>Date de l'événement :</strong> {{ event.date | date('Y-m-d') }}</p>
+                <p><strong>Lieu :</strong> {{ event.local }}</p>
+            </div>
+        </div>
+
+        <div class="card shadow-sm mt-4">
+            <div class="card-body">
+                <h5 class="card-title text-center mb-3">Confirmer votre réservation</h5>
+                {{ form_start(form, {'attr': {'class': 'reservation-form'}}) }}
+
+                <div class="mb-3">
+                    {{ form_row(form.Date, {'attr': {'class': 'form-control', 'placeholder': 'Sélectionner la date de réservation'}}) }}
+                </div>
+
+                <div class="text-center">
+                    <button type="submit" class="btn btn-lg btn-success" style="background-color: #17B8A6; border-color: #17B8A6;">Confirmer la réservation</button>
+                </div>
+
+                {{ form_end(form) }}
+            </div>
+        </div>
+    </div>
+{% endblock %}
+
+
+
+

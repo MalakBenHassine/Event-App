@@ -152,7 +152,7 @@ class User implements UserInterface, PasswordAuthenticatedUserInterface
     public function getUserIdentifier(): string
     {
         // TODO: Implement getUserIdentifier() method.
-        return "null";
+        return $this->email;
     }
 
     public function getPassword(): ?string

@@ -22,10 +22,10 @@ class Reservation
 
     #[ORM\ManyToOne(inversedBy: 'reservations')]
     #[ORM\JoinColumn(nullable: false)]
-    private ?Events $Event = null;
+    private ?Events $event = null;
 
     #[ORM\ManyToOne(inversedBy: 'reservations')]
-    private ?User $User = null;
+    private ?User $user = null;
 
     #[ORM\OneToOne(mappedBy: 'reservation', cascade: ['persist', 'remove'])]
     private ?Tickets $ticket = null;
@@ -61,27 +61,28 @@ class Reservation
 
     public function getEvent(): ?Events
     {
-        return $this->Event;
+        return $this->event;
     }
 
-    public function setEvent(?Events $Event): static
+    public function setEvent(?Events $event): static
     {
-        $this->Event = $Event;
+        $this->event = $event;
 
         return $this;
     }
 
     public function getUser(): ?User
     {
-        return $this->User;
+        return $this->user;
     }
 
-    public function setUser(?User $User): static
+    public function setUser(?User $user): static
     {
-        $this->User = $User;
+        $this->user = $user;
 
         return $this;
     }
+
 
     public function getTicket(): ?Tickets
     {

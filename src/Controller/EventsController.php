@@ -21,7 +21,8 @@ class EventsController extends AbstractController
 
     #[Route('/events', name: 'app_event')]
     public function listEvents(EventsRepository $er): Response
-    {
+
+    {   $this->denyAccessUnlessGranted('ROLE_ADMIN');
         $events = $er->findAll();
         return $this->render('events/listEvents.html.twig', [
             'events' => $events,
@@ -29,10 +30,19 @@ class EventsController extends AbstractController
             'value' => "",
         ]);
     }
+    #[Route('/liste-des-events', name: 'app_user_event_list')]
+    public function listUserEvents(EventsRepository $er): Response
+    {
+        $events = $er->findAll();
+
+        return $this->render('events/user_listEvents.html.twig', [
+            'events' => $events,
+        ]);
+    }
 
     #[Route('/events/filter', name: 'app_event_filter', methods: ['GET'])]
     public function filterEvents(Request $request, EventsRepository $er): Response
-    {
+    {    $this->denyAccessUnlessGranted('ROLE_ADMIN');
         $field = $request->query->get('field');
         $value = $request->query->get('value');
 
@@ -50,7 +60,7 @@ class EventsController extends AbstractController
     }
     #[Route('/events/new', name: 'app_new')]
     public function new(Request $request, EntityManagerInterface $em): Response
-    {
+    {    $this->denyAccessUnlessGranted('ROLE_ADMIN');
         $event = new Events();
 
         $form = $this->createForm(EventType::class, $event);
@@ -71,7 +81,7 @@ class EventsController extends AbstractController
 
     #[Route('/event/edit/{id}', name: 'app_event_edit')]
     public function edit(Events $event, Request $request, EntityManagerInterface $entityManager): Response
-    {
+    {    $this->denyAccessUnlessGranted('ROLE_ADMIN');
         // Création du formulaire avec l'entité existante
         $form = $this->createForm(EventType::class, $event);
 
@@ -96,7 +106,7 @@ class EventsController extends AbstractController
     // Delete Event
     #[Route('/events/delete/{id}', name: 'app_event_delete', methods: ['POST'])]
     public function deleteEvent(Request $request, Events $event, EntityManagerInterface $em): Response
-    {
+    {    $this->denyAccessUnlessGranted('ROLE_ADMIN');
         if ($this->isCsrfTokenValid('delete' . $event->getId(), $request->request->get('_token'))) {
             $em->remove($event);
             $em->flush();
@@ -104,4 +114,7 @@ class EventsController extends AbstractController
 
         return $this->redirectToRoute('app_event');
     }
+
+
+
 }

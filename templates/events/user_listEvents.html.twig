@@ -1,0 +1,148 @@
+{% extends 'base.html.twig' %}
+
+{% block title %}Home - All Events{% endblock %}
+
+{% block head %}
+    <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0-alpha1/dist/css/bootstrap.min.css" rel="stylesheet">
+    <style>
+        /* Banner Section */
+        .banner-section {
+            background-color: #17b8a6; /* Green background color for banner */
+            padding-top: 100px;
+            padding-bottom: 100px;
+        }
+
+        .banner-section h2 {
+            font-family: 'Arial', sans-serif;
+            font-weight: 700;
+            color: black;
+        }
+
+        .banner-section p {
+            font-size: 1.2rem;
+            color: black;
+        }
+
+        /* Card Hover Effect */
+        .card:hover {
+            transform: translateY(-5px);
+            box-shadow: 0 8px 16px rgba(0, 0, 0, 0.1);
+        }
+
+        /* Button Customization */
+        .btn {
+            background-color: #17b8a6;
+            border: none;
+            font-weight: bold;
+        }
+
+        .btn:hover {
+            background-color: #149b8c;
+            border: none;
+        }
+
+        /* Additional Styling */
+        h1, .card-title {
+            color: #17b8a6;
+        }
+
+        .card-img-top {
+            height: 200px;
+            object-fit: cover;
+        }
+
+        /* Navbar Styles */
+        .navbar {
+            background-color: black; /* Black navbar background */
+        }
+
+        .navbar-nav .nav-link {
+            color: black; /* White text for navbar links */
+        }
+
+        .navbar-nav .nav-link.active {
+            color: #17b8a6; /* Active link color */
+        }
+
+        /* Container Section */
+        .container {
+            background-color: black; /* Changed to white to avoid overriding other styles */
+        }
+        .nav-link{
+            color: black;
+        }
+    </style>
+{% endblock %}
+
+{% block body %}
+    <!-- Navbar -->
+    <nav class="navbar navbar-expand-lg navbar-dark">
+        <div class="container">
+            <a class="navbar-brand" href="#">Eventify</a>
+            <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#navbarNav" aria-controls="navbarNav" aria-expanded="false" aria-label="Toggle navigation">
+                <span class="navbar-toggler-icon"></span>
+            </button>
+            <div class="collapse navbar-collapse" id="navbarNav">
+                <ul class="navbar-nav ms-auto">
+                    <li class="nav-item">
+                        <a class="nav-link active" href="#">Home</a>
+                    </li>
+                    <li class="nav-item">
+                        <a class="nav-link" href="#">All Events</a>
+                    </li>
+                    <li class="nav-item">
+                        <a class="nav-link" href="#">About Us</a>
+                    </li>
+                    <li class="nav-item">
+                        <a class="nav-link" href="#">Contact</a>
+                    </li>
+                </ul>
+            </div>
+        </div>
+    </nav>
+
+    <!-- Banner Section: Discover New Events -->
+    <section class="banner-section mb-5 py-5">
+        <div class="container text-center">
+            <h2 class="display-4 font-weight-bold mb-3">Discover New Events</h2>
+            <p class="lead">Explore and reserve your spot at the best events around you. Don’t miss out on the exciting experiences waiting for you!</p>
+        </div>
+    </section>
+
+    <!-- Main content: Events -->
+    <div class="container mt-5">
+        <h1 class="text-center mb-5" style="color: #17b8a6;">All Events</h1>
+
+        <div class="row">
+            {% for event in events %}
+                <div class="col-md-4 mb-4">
+                    <div class="card shadow-lg border-light rounded">
+                        <div class="card-body">
+                            <h5 class="card-title" style="color: #17b8a6;">{{ event.nom }}</h5>
+                            <p class="card-text">{{ event.description }}</p>
+                            <p><strong>Date:</strong> {{ event.date|date('Y-m-d') }}</p>
+                            <p><strong>Location:</strong> {{ event.local }}</p>
+                            <a href="{{ path('event_reservation', {'id': event.id}) }}" class="btn" style="background-color: #17b8a6; color: white; width: 100%;">Make Reservation</a>
+                        </div>
+                    </div>
+                </div>
+            {% else %}
+                <div class="col-12">
+                    <p class="text-center">No events available at the moment.</p>
+                </div>
+            {% endfor %}
+        </div>
+    </div>
+
+    <!-- Bootstrap JS & Dependencies -->
+    <script src="https://cdn.jsdelivr.net/npm/@popperjs/core@2.11.6/dist/umd/popper.min.js"></script>
+    <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0-alpha1/dist/js/bootstrap.min.js"></script>
+{% endblock %}
+
+
+
+
+
+
+
+
