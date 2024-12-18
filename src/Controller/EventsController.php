@@ -19,6 +19,16 @@ use Symfony\Component\Form\Extension\Core\Type\SubmitType;
 class EventsController extends AbstractController
 {
 
+
+
+    #[Route('/home', name: 'app_home')]
+    public function home(): Response
+    {
+        return $this->render('events/home.html.twig');
+    }
+
+
+
     #[Route('/events', name: 'app_event')]
     public function listEvents(EventsRepository $er): Response
     {

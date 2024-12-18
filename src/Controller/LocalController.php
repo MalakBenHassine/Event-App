@@ -22,7 +22,7 @@ final class LocalController extends AbstractController
             'locals' => $localRepository->findAll(),
         ]);
     }
-    #[IsGranted('ROLE_LOCATOR')]
+    #[IsGranted('ROLE_LOUEUR')]
 
     #[Route('/new', name: 'app_local_new', methods: ['GET', 'POST'])]
     public function new(Request $request, EntityManagerInterface $entityManager): Response
@@ -51,7 +51,7 @@ final class LocalController extends AbstractController
             'local' => $local,
         ]);
     }
-    #[IsGranted('ROLE_LOCATOR')]
+    #[IsGranted('ROLE_LOUEUR')]
 
     #[Route('/{id}/edit', name: 'app_local_edit', methods: ['GET', 'POST'])]
     public function edit(Request $request, Local $local, EntityManagerInterface $entityManager): Response
@@ -70,7 +70,7 @@ final class LocalController extends AbstractController
             'form' => $form,
         ]);
     }
-    #[IsGranted('ROLE_LOCATOR')]
+    #[IsGranted('ROLE_LOUEUR')]
 
     #[Route('/{id}', name: 'app_local_delete', methods: ['POST'])]
     public function delete(Request $request, Local $local, EntityManagerInterface $entityManager): Response
@@ -82,4 +82,20 @@ final class LocalController extends AbstractController
 
         return $this->redirectToRoute('app_local_index', [], Response::HTTP_SEE_OTHER);
     }
+
+    #[Route('/local/available', name: 'app_local_available', methods: ['GET'])]
+    public function availableLocals(LocalRepository $localRepository): Response
+    {
+        $availableLocals = $localRepository->findAvailableLocals(); // Récupérer les locaux disponibles
+
+        dump($availableLocals); // Vérifiez les données dans la barre de débogage Symfony
+
+        return $this->render('local/available.html.twig', [
+            'locals' => $availableLocals,
+        ]);
+    }
+
+
+
+
 }

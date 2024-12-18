@@ -1,0 +1,74 @@
+{% extends 'base.html.twig' %}
+
+{% block title %}Sign up{% endblock %}
+
+{% block body %}
+    <div class="container-fluid min-vh-100 d-flex justify-content-center align-items-center bg-white">
+        <div class="row w-100 shadow-lg" style="max-width: 900px; border-radius: 10px; overflow: hidden; border: 1px solid #17B8A6;">
+            <!-- Partie gauche : Image -->
+            <div class="col-lg-6 d-flex justify-content-center align-items-center p-4" style="background-color: #17B8A6;">
+                <img src="{{ asset('assets/img/signup-image.svg') }}" alt="Sign up" class="img-fluid" style="max-height: 300px;">
+            </div>
+
+            <!-- Partie droite : Formulaire -->
+            <div class="col-lg-6 p-4">
+                <div class="text-center mb-4">
+                    <h3 class="fw-bold" style="color: #17B8A6;">Sign up</h3>
+                </div>
+                <div class="card border-0">
+                    <div class="card-body">
+                        {{ form_start(registrationForm, {'attr': {'class': 'needs-validation'}}) }}
+
+                        <!-- Email -->
+                        <div class="form-floating mb-3">
+                            {{ form_widget(registrationForm.email, {'attr': {'class': 'form-control', 'placeholder': 'name@example.com', 'style': 'border: 1px solid #17B8A6;'}}) }}
+                            {{ form_label(registrationForm.email, 'Email address') }}
+                            {{ form_errors(registrationForm.email) }}
+                        </div>
+
+                        <!-- Full Name -->
+                        <div class="form-floating mb-3">
+                            {{ form_widget(registrationForm.name, {'attr': {'class': 'form-control', 'placeholder': 'Full Name', 'style': 'border: 1px solid #17B8A6;'}}) }}
+                            {{ form_label(registrationForm.name, 'Full Name') }}
+                            {{ form_errors(registrationForm.name) }}
+                        </div>
+
+                        <!-- Phone -->
+                        <div class="form-floating mb-3">
+                            {{ form_widget(registrationForm.phone, {'attr': {'class': 'form-control', 'placeholder': 'Phone Number', 'style': 'border: 1px solid #17B8A6;'}}) }}
+                            {{ form_label(registrationForm.phone, 'Phone Number') }}
+                            {{ form_errors(registrationForm.phone) }}
+                        </div>
+
+                        <!-- Password -->
+                        <div class="form-floating mb-3">
+                            {{ form_widget(registrationForm.plainPassword, {'attr': {'class': 'form-control', 'placeholder': 'Password', 'style': 'border: 1px solid #17B8A6;'}}) }}
+                            {{ form_label(registrationForm.plainPassword, 'Password') }}
+                            {{ form_errors(registrationForm.plainPassword) }}
+                        </div>
+
+                        <!-- Agree Terms -->
+                        <div class="form-check mb-3">
+                            {{ form_widget(registrationForm.agreeTerms, {'attr': {'class': 'form-check-input'}}) }}
+                            {{ form_label(registrationForm.agreeTerms, 'Agree to terms and conditions', {'label_attr': {'class': 'form-check-label'}}) }}
+                            {{ form_errors(registrationForm.agreeTerms) }}
+                        </div>
+
+                        <!-- Submit Button -->
+                        <div class="d-grid mb-3">
+                            <button class="btn btn-lg" type="submit" style="background-color: #17B8A6; color: #fff; border: none;">Sign up</button>
+                        </div>
+
+                        {{ form_end(registrationForm) }}
+                    </div>
+                </div>
+
+                <!-- Lien supplémentaire -->
+                <p class="text-center mt-3">
+                    Already have an account?
+                    <a href="{{ path('app_login') }}" class="text-decoration-none" style="color: #17B8A6;">Sign in</a>
+                </p>
+            </div>
+        </div>
+    </div>
+{% endblock %}
