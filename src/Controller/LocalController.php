@@ -13,6 +13,7 @@ use Symfony\Component\HttpFoundation\Response;
 use Symfony\Component\Routing\Attribute\Route;
 use Symfony\Component\Security\Http\Attribute\IsGranted;
 
+
 #[Route('/local')]
 final class LocalController extends AbstractController
 {
@@ -54,13 +55,11 @@ final class LocalController extends AbstractController
         ]);
     }
 
-    #[Route('/{id}', name: 'app_local_show', methods: ['GET'])]
-    public function show(Local $local): Response
-    {
-        return $this->render('local/show.html.twig', [
-            'local' => $local,
-        ]);
-    }
+
+
+
+
+
     #[IsGranted('ROLE_LOUEUR')]
 
     #[Route('/{id}/edit', name: 'app_local_edit', methods: ['GET', 'POST'])]
@@ -93,15 +92,24 @@ final class LocalController extends AbstractController
         return $this->redirectToRoute('app_local_index', [], Response::HTTP_SEE_OTHER);
     }
 
-    #[Route('/local/available', name: 'app_local_available', methods: ['GET'])]
-    public function availableLocals(LocalRepository $localRepository): Response
+    #[Route('/{id}', name: 'app_local_show', methods: ['GET'])]
+    public function show(Local $local): Response
     {
-        $availableLocals = $localRepository->findAvailableLocals(); // Récupérer les locaux disponibles
+        return $this->render('local/show.html.twig', [
+            'local' => $local,
+        ]);
+    }
 
-        dump($availableLocals); // Vérifiez les données dans la barre de débogage Symfony
+
+
+
+    #[Route('/local/disponibles', name: 'app_local_available', methods: ['GET'])]
+    public function available(LocalRepository $localRepository): Response
+    {
+        $locals = $localRepository->findAvailableLocals();
 
         return $this->render('local/available.html.twig', [
-            'locals' => $availableLocals,
+            'locals' => $locals,
         ]);
     }
 

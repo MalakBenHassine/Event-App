@@ -25,9 +25,9 @@ class Local
     private ?int $capacite = null;
 
 
-
     #[ORM\Column(type: 'boolean')]
     private bool $isAvailable = true;
+
 
     #[ORM\Column(type: 'text', nullable: true)]
     private ?string $description = null;
@@ -35,9 +35,7 @@ class Local
     #[ORM\Column(type: 'decimal', precision: 10, scale: 2, nullable: true)]
     private ?float $price = null;
 
-
-
-
+// Getter et Setter pour description
     public function getDescription(): ?string
     {
         return $this->description;
@@ -46,9 +44,11 @@ class Local
     public function setDescription(?string $description): self
     {
         $this->description = $description;
+
         return $this;
     }
 
+// Getter et Setter pour price
     public function getPrice(): ?float
     {
         return $this->price;
@@ -57,19 +57,10 @@ class Local
     public function setPrice(?float $price): self
     {
         $this->price = $price;
+
         return $this;
     }
 
-    public function isAvailable(): bool
-    {
-        return $this->isAvailable;
-    }
-
-    public function setIsAvailable(bool $isAvailable): self
-    {
-        $this->isAvailable = $isAvailable;
-        return $this;
-    }
 
     /**
      * @var Collection<int, Events>
@@ -172,6 +163,17 @@ class Local
     {
         $this->user = $user;
 
+        return $this;
+    }
+
+    public function isAvailable(): bool
+    {
+        return $this->isAvailable;
+    }
+
+    public function setIsAvailable(bool $isAvailable): self
+    {
+        $this->isAvailable = $isAvailable;
         return $this;
     }
 }
