@@ -52,7 +52,6 @@ class EventType extends AbstractType
                 ],
 
             ]);
-
     }
 
     public function configureOptions(OptionsResolver $resolver): void
@@ -62,4 +61,3 @@ class EventType extends AbstractType
         ]);
     }
 }
-

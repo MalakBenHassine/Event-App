@@ -6,8 +6,6 @@ use App\Entity\PasswordResetToken;
 use Doctrine\Bundle\DoctrineBundle\Repository\ServiceEntityRepository;
 use Doctrine\Persistence\ManagerRegistry;
 
-
-
 /**
  * @extends ServiceEntityRepository<PasswordResetToken>
  */
@@ -17,5 +15,4 @@ class PasswordResetTokenRepository extends ServiceEntityRepository
     {
         parent::__construct($registry, PasswordResetToken::class);
     }
-
 }
