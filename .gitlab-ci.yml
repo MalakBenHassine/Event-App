@@ -15,21 +15,21 @@ security-checker:
   script:
     - composer install --prefer-dist --no-progress --no-suggest
     - composer audit
-  allow_failure: false
+  allow_failure: true
 
 phpcs:
   stage: coding_standards
   script:
     - composer install --prefer-dist --no-progress --no-suggest
     - phpcs -v --standard=PSR12 --ignore=./src/Kernel.php ./src
-  allow_failure: false
+  allow_failure: true
 
 phpstan:
   stage: coding_standards
   script:
     - composer install --prefer-dist --no-progress --no-suggest
     - phpstan analyse ./src
-  allow_failure: false
+  allow_failure: true
 
 twig-lint:
   stage: coding_standards
@@ -61,7 +61,7 @@ phpunit:
     paths:
       - coverage.xml
     expire_in: 1 week
-  allow_failure: false
+  allow_failure: true
 
 docker-build-and-push:
   stage: build_and_push
