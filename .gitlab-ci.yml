@@ -7,8 +7,8 @@ phpunit:
   variables:
     MYSQL_ROOT_PASSWORD: pass_test
     MYSQL_DATABASE: integration
-    MYSQL_USER:
-    MYSQL_PASSWORD:
+    MYSQL_USER: integration
+    MYSQL_PASSWORD: integration
     DATABASE_URL: 'mysql://root:pass_test@mysql:3306/integration'
   before_script:
     - apt-get update && apt-get install -y git libzip-dev
