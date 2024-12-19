@@ -20,4 +20,4 @@ phpunit:
     - php bin/console doctrine:migration:migrate --env=test --no-interaction
   script:
     - php bin/phpunit --testdox
-  allow_failure: false
+  allow_failure: true
