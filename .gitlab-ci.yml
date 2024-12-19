@@ -1,40 +1,35 @@
-image: jakzal/phpqa:php8.2 
-before_script:
-  - composer install
-cache:
-  paths:
-    - vendor/
 stages:
-  - SecurityChecker
-  - CodingStandards
-  - UnitTests
-security-checker:
-  stage: SecurityChecker
-  script:
-    - composer self-update
-    - composer audit
-  allow_failure: true
-phpcs:
-  stage: CodingStandards
-  script:
-    - phpcs -v --standard=PSR12 --ignore=./src/Kernel.php ./src
-  allow_failure: true
-phpstan:
-  stage: CodingStandards
-  script:
-    - phpstan analyse ./src
-  allow_failure: true
-twig-lint:
-  stage: CodingStandards
-  script:
-    - twig-lint lint ./templates
-  allow_failure: true
-phpunit:
-  stage: UnitTests
-  script:
-    - php bin/phpunit
-  allow_failure: false
-# Utilisation du stage valide "test"
+  - build
+  - deploy
 
+variables:
+  IMAGE_NAME: "$DOCKER_USERNAME/symfony-app"
 
+build_image:
+  stage: build
+  image: docker:latest
+  services:
+    - docker:dind
+  script:
+    # Connecter Docker Hub
+    - echo "$DOCKER_PASSWORD" | docker login -u "$DOCKER_USERNAME" --password-stdin
+    # Construire l'image Docker
+    - docker build -t $IMAGE_NAME:$CI_COMMIT_SHORT_SHA .
+    # Taguer l'image comme "latest"
+    - docker tag $IMAGE_NAME:$CI_COMMIT_SHORT_SHA $IMAGE_NAME:latest
+  only:
+    - main  # Construire uniquement sur la branche principale
 
+deploy_image:
+  stage: deploy
+  image: docker:latest
+  services:
+    - docker:dind
+  script:
+    # Connecter Docker Hub
+    - echo "$DOCKER_PASSWORD" | docker login -u "$DOCKER_USERNAME" --password-stdin
+    # Pousser les images Docker
+    - docker push $IMAGE_NAME:$CI_COMMIT_SHORT_SHA
+    - docker push $IMAGE_NAME:latest
+  only:
+    - main  # Déployer uniquement sur la branche principale
