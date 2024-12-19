@@ -1,35 +1,26 @@
+image: jakzal/phpqa:php8.2
+
+cache:
+  paths:
+    - vendor/
+
 stages:
-  - build
-  - deploy
+  - security
+  - coding_standards
+  - test
+  - build_and_push
 
-variables:
-  IMAGE_NAME: "$DOCKER_USERNAME/symfony-app"
 
-build_image:
-  stage: build
+
+docker-build-and-push:
+  stage: build_and_push
   image: docker:latest
   services:
     - docker:dind
   script:
-    # Connecter Docker Hub
-    - echo "$DOCKER_PASSWORD" | docker login -u "$DOCKER_USERNAME" --password-stdin
-    # Construire l'image Docker
-    - docker build -t $IMAGE_NAME:$CI_COMMIT_SHORT_SHA .
-    # Taguer l'image comme "latest"
-    - docker tag $IMAGE_NAME:$CI_COMMIT_SHORT_SHA $IMAGE_NAME:latest
+    - docker build -t $DOCKER_USERNAME/event -f docker/php/Dockerfile .
+    - docker save $DOCKER_USERNAME/event > event.tar
+    - docker login -u $DOCKER_USERNAME -p DOCKER_PASSWORD
+    - docker push $DOCKER_USERNAME/event
   only:
-    - main  # Construire uniquement sur la branche principale
-
-deploy_image:
-  stage: deploy
-  image: docker:latest
-  services:
-    - docker:dind
-  script:
-    # Connecter Docker Hub
-    - echo "$DOCKER_PASSWORD" | docker login -u "$DOCKER_USERNAME" --password-stdin
-    # Pousser les images Docker
-    - docker push $IMAGE_NAME:$CI_COMMIT_SHORT_SHA
-    - docker push $IMAGE_NAME:latest
-  only:
-    - main  # Déployer uniquement sur la branche principale
+    -  branches
