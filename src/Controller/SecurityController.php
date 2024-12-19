@@ -33,17 +33,17 @@ class SecurityController extends AbstractController
     #[Route(path: '/home', name: 'app_home')]
     public function home(): Response
     {
-        //throw new \LogicException('This method can be blank - it will be intercepted by the logout key on your firewall.');
-        return $this->render('Home.html.twig',
-        );
+        //throw new \LogicException('This method can be blank
+        // - it will be intercepted by the logout key on your firewall.');
+        return $this->render('Home.html.twig',);
     }
 
     #[Route(path: '/logout', name: 'app_logout')]
     public function logout(): Response
     {
-        //throw new \LogicException('This method can be blank - it will be intercepted by the logout key on your firewall.');
-        return $this->render('security/Succes.html.twig',
-        );
+        //throw new \LogicException('This method can be blank
+        // - it will be intercepted by the logout key on your firewall.');
+        return $this->render('security/Succes.html.twig',);
     }
 
 
@@ -51,7 +51,9 @@ class SecurityController extends AbstractController
 
 
     #[Route(path: '/forgot-password', name: 'app_forgot_password')]
-    public function forgotPassword(Request $request, UserRepository $userRepository, MailerInterface $mailer, EntityManagerInterface $entityManager): Response
+    public function forgotPassword(Request $request,
+                                   UserRepository $userRepository, MailerInterface $mailer,
+                                   EntityManagerInterface $entityManager): Response
     {
         // Logique pour récupérer l'utilisateur par e-mail
         $email = $request->request->get('email');
@@ -83,10 +85,11 @@ class SecurityController extends AbstractController
 
             // Créer l'e-mail
             $emailMessage = (new Email())
-                ->from('noreply@example.com') // Remplacez par votre adresse e-mail
+                ->from('noreply@example.com')
                 ->to($user->getEmail())
                 ->subject('Réinitialisation de votre mot de passe')
-                ->html('<p>Voici le lien pour réinitialiser votre mot de passe : <a href="' . $resetLink . '">' . $resetLink . '</a></p>');
+                ->html('<p>Voici le lien pour réinitialiser votre mot de passe : <a href="'
+                    . $resetLink . '">' . $resetLink . '</a></p>');
 
             // Envoyer l'e-mail
             $mailer->send($emailMessage);
@@ -139,7 +142,8 @@ class SecurityController extends AbstractController
                     ->from('noreply@example.com') // Remplacez par votre adresse e-mail
                     ->to($user->getEmail())
                     ->subject('Réinitialisation de votre mot de passe')
-                    ->html('<p>Voici le lien pour réinitialiser votre mot de passe : <a href="' . $resetLink . '">' . $resetLink . '</a></p>');
+                    ->html('<p>Voici le lien pour réinitialiser votre mot de passe : <a href="'
+                        . $resetLink . '">' . $resetLink . '</a></p>');
 
                 // Envoyer l'e-mail
                 $mailer->send($emailMessage);
@@ -190,8 +194,4 @@ class SecurityController extends AbstractController
 
         return $this->render('security/reset_password.html.twig', ['token' => $token]);
     }
-
-
-
-
 }

@@ -24,7 +24,8 @@ class RegistrationController extends AbstractController
     }
 
     #[Route('/register', name: 'app_register')]
-    public function register(Request $request, UserPasswordHasherInterface $userPasswordHarsher, Security $security, EntityManagerInterface $entityManager): Response
+    public function register(Request $request, UserPasswordHasherInterface
+    $userPasswordHarsher, Security $security, EntityManagerInterface $entityManager): Response
     {
         $user = new User();
        // $user->setRoles(['ROLE_ORGANIZATOR','ROLE_LOUEUR','ROLE_PARTICIPANT']);
@@ -42,7 +43,9 @@ class RegistrationController extends AbstractController
             $entityManager->flush();
 
             // generate a signed url and email it to the user
-            $this->emailVerifier->sendEmailConfirmation('app_verify_email', $user,
+            $this->emailVerifier->sendEmailConfirmation(
+                'app_verify_email',
+                $user,
                 (new TemplatedEmail())
                     ->from(new Address('jessermdimagh@gmail.com', 'Event Mail Bot'))
                     ->to((string) $user->getEmail())

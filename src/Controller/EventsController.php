@@ -3,7 +3,6 @@
 namespace App\Controller;
 
 use Doctrine\DBAL\Types\Types;
-
 use App\Entity\Events;
 use App\Form\EventType;
 use App\Repository\EventsRepository;
@@ -19,9 +18,6 @@ use Symfony\Component\Security\Http\Attribute\IsGranted;
 
 class EventsController extends AbstractController
 {
-
-
-
     #[Route('/home', name: 'app_home')]
     public function home(): Response
     {
@@ -54,7 +50,8 @@ class EventsController extends AbstractController
 
     #[Route('/events/filter', name: 'app_event_filter', methods: ['GET'])]
     public function filterEvents(Request $request, EventsRepository $er): Response
-    {    $this->denyAccessUnlessGranted('ROLE_ADMIN');
+    {
+        $this->denyAccessUnlessGranted('ROLE_ADMIN');
         $field = $request->query->get('field');
         $value = $request->query->get('value');
 
@@ -93,7 +90,8 @@ class EventsController extends AbstractController
 
     #[Route('/event/edit/{id}', name: 'app_event_edit')]
     public function edit(Events $event, Request $request, EntityManagerInterface $entityManager): Response
-    {    $this->denyAccessUnlessGranted('ROLE_ADMIN');
+    {
+        $this->denyAccessUnlessGranted('ROLE_ADMIN');
         // Création du formulaire avec l'entité existante
         $form = $this->createForm(EventType::class, $event);
 
@@ -118,7 +116,8 @@ class EventsController extends AbstractController
     // Delete Event
     #[Route('/events/delete/{id}', name: 'app_event_delete', methods: ['POST'])]
     public function deleteEvent(Request $request, Events $event, EntityManagerInterface $em): Response
-    {    $this->denyAccessUnlessGranted('ROLE_ADMIN');
+    {
+        $this->denyAccessUnlessGranted('ROLE_ADMIN');
         if ($this->isCsrfTokenValid('delete' . $event->getId(), $request->request->get('_token'))) {
             $em->remove($event);
             $em->flush();
@@ -126,7 +125,4 @@ class EventsController extends AbstractController
 
         return $this->redirectToRoute('app_event');
     }
-
-
-
 }

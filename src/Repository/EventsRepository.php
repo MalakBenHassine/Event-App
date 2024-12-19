@@ -27,7 +27,7 @@ class EventsRepository extends ServiceEntityRepository
         return $queryBuilder->getQuery()->getResult();
     }
     public function findByExampleField($value): array
-       {
+    {
             return $this->createQueryBuilder('e')
              ->andWhere('e.exampleField = :val')
            ->setParameter('val', $value)
@@ -35,14 +35,16 @@ class EventsRepository extends ServiceEntityRepository
                ->setMaxResults(10)
               ->getQuery()
              ->getResult()
-          ;}
+          ;
+    }
 
-       public function findOneBySomeField($value): ?Events
-       {
-            return $this->createQueryBuilder('e')
-             ->andWhere('e.exampleField = :val')
-               ->setParameter('val', $value)
-               ->getQuery()
-               ->getOneOrNullResult()
-            ;}
- }
+    public function findOneBySomeField($value): ?Events
+    {
+         return $this->createQueryBuilder('e')
+          ->andWhere('e.exampleField = :val')
+            ->setParameter('val', $value)
+            ->getQuery()
+            ->getOneOrNullResult()
+         ;
+    }
+}

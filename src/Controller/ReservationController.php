@@ -82,6 +82,4 @@ class ReservationController extends AbstractController
             'reservations' => $reservations,
         ]);
     }
-
 }
-

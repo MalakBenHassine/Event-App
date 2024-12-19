@@ -1,9 +1,9 @@
 <?php
 
 namespace App\Security;
+
 use Symfony\Component\HttpFoundation\Request;
 use Symfony\Component\HttpFoundation\RedirectResponse;
-
 use Symfony\Component\Routing\Generator\UrlGeneratorInterface;
 use Symfony\Component\Security\Core\Authentication\Token\TokenInterface;
 use Symfony\Component\Security\Http\Authenticator\AbstractLoginFormAuthenticator;
@@ -14,7 +14,6 @@ use Symfony\Component\Security\Http\Authenticator\Passport\Credentials\PasswordC
 use Symfony\Component\Security\Http\SecurityRequestAttributes;
 use Symfony\Component\Security\Http\Util\TargetPathTrait;
 use Symfony\Component\Security\Http\Authenticator\Passport\Passport;
-
 
 class AppCustomAuthentication extends AbstractLoginFormAuthenticator
 {
@@ -42,16 +41,17 @@ class AppCustomAuthentication extends AbstractLoginFormAuthenticator
         );
     }
 
-    public function onAuthenticationSuccess(Request $request, TokenInterface $token, string $firewallName): RedirectResponse
+    public function onAuthenticationSuccess
+    (Request $request, TokenInterface $token, string $firewallName): RedirectResponse
     {
         if ($targetPath = $this->getTargetPath($request->getSession(), $firewallName)) {
             return new RedirectResponse($targetPath);
         }
-        $user=$token->getUser();
-        if(in_array("ROLE_PARTICIPANT",$user->getRoles(),true)){
+        $user = $token->getUser();
+        if (in_array("ROLE_PARTICIPANT", $user->getRoles(), true)) {
             return new RedirectResponse($this->urlGenerator->generate('app_event'));
         }
-        if(in_array("ROLE_ORGANIZER",$user->getRoles(),true)){
+        if (in_array("ROLE_ORGANIZER", $user->getRoles(), true)) {
             return new RedirectResponse($this->urlGenerator->generate('app_new'));
         }
 
@@ -61,7 +61,7 @@ class AppCustomAuthentication extends AbstractLoginFormAuthenticator
 
 // For example:
 // return new RedirectResponse($this->urlGenerator->generate('some_route'));
-        throw new \Exception('TODO: provide a valid redirect inside '.__FILE__);
+        throw new \Exception('TODO: provide a valid redirect inside ' . __FILE__);
     }
 
     protected function getLoginUrl(Request $request): string
