@@ -27,7 +27,7 @@ class RegistrationFormType extends AbstractType
                 "choices" => [
                     "ROLE_PARTICIPANT" => "ROLE_PARTICIPANT",
                     "ROLE_ORGANIZER" => "ROLE_ORGANIZER",
-                    "ROLE_LOCATOR" => "ROLE_LOCATOR"
+                    "ROLE_LOCATOR" => "ROLE_LOUEUR"
                 ]
             ])
             ->add('agreeTerms', CheckboxType::class, [
