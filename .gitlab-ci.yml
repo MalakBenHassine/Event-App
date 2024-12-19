@@ -1,6 +1,6 @@
 phpunit:
   image: php:8.2-apache
-  stage: UnitTests
+  stage: test
   services:
     - name: mysql:5.7
       alias: mysql
@@ -19,5 +19,5 @@ phpunit:
     - php bin/console doctrine:database:create --env=test
     - php bin/console doctrine:migration:migrate --env=test --no-interaction
   script:
-      - php bin/phpunit –testdox
+    - php bin/phpunit --testdox
   allow_failure: false
