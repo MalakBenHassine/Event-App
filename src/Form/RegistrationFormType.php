@@ -4,9 +4,12 @@ namespace App\Form;
 
 use App\Entity\User;
 use Symfony\Component\Form\AbstractType;
+use Symfony\Component\Form\CallbackTransformer;
 use Symfony\Component\Form\Extension\Core\Type\CheckboxType;
+use Symfony\Component\Form\Extension\Core\Type\ChoiceType;
 use Symfony\Component\Form\Extension\Core\Type\PasswordType;
 use Symfony\Component\Form\FormBuilderInterface;
+use Symfony\Component\Form\FormEvents;
 use Symfony\Component\OptionsResolver\OptionsResolver;
 use Symfony\Component\Validator\Constraints\IsTrue;
 use Symfony\Component\Validator\Constraints\Length;
@@ -20,6 +23,13 @@ class RegistrationFormType extends AbstractType
             ->add('email')
             ->add('name')
             ->add('phone')
+            ->add("roles", ChoiceType::class, [
+                "choices" => [
+                    "ROLE_PARTICIPANT" => "ROLE_PARTICIPANT",
+                    "ROLE_ORGANIZER" => "ROLE_ORGANIZER",
+                    "ROLE_LOCATOR" => "ROLE_LOUEUR"
+                ]
+            ])
             ->add('agreeTerms', CheckboxType::class, [
                 'mapped' => false,
                 'constraints' => [
@@ -44,8 +54,16 @@ class RegistrationFormType extends AbstractType
                         'max' => 4096,
                     ]),
                 ],
-            ])
-        ;
+            ]);
+        $builder->get("roles")->addModelTransformer(new CallbackTransformer(
+            function ($tagsAsArray): string {
+                return implode(",", $tagsAsArray);
+            },
+            function ($tagsAsArray): array {
+                return explode(",", $tagsAsArray);
+            }
+        ));
+
     }
 
     public function configureOptions(OptionsResolver $resolver): void

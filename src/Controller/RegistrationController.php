@@ -28,7 +28,7 @@ class RegistrationController extends AbstractController
     $userPasswordHarsher, Security $security, EntityManagerInterface $entityManager): Response
     {
         $user = new User();
-        $user->setRoles(['ROLE_USER','ROLE_LOUEUR','ROLE_PARTICIPANT']);
+       // $user->setRoles(['ROLE_ORGANIZATOR','ROLE_LOUEUR','ROLE_PARTICIPANT']);
         $form = $this->createForm(RegistrationFormType::class, $user);
         $form->handleRequest($request);
 

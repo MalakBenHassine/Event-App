@@ -31,3 +31,4 @@ security:
         - { path: ^/organizer, roles: ROLE_ORGANIZER }
         - { path: ^/locator, roles: ROLE_LOCATOR }
         - { path: ^/user, roles: ROLE_USER }
+        - { path: ^/event, roles: ROLE_PARTICIPANT }
