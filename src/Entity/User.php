@@ -45,11 +45,6 @@ class User implements UserInterface, PasswordAuthenticatedUserInterface
     private bool $isVerified = false;
 
 
-    /**
-     * @var Collection<int, Reservation>
-     */
-    #[ORM\OneToMany(targetEntity: Reservation::class, mappedBy: 'user', orphanRemoval: true)]
-    private Collection $reservation;
 
     /**
      * @var Collection<int, Events>
@@ -65,7 +60,7 @@ class User implements UserInterface, PasswordAuthenticatedUserInterface
 
     public function __construct()
     {
-        $this->reservation = new ArrayCollection();
+        $this->reservations = new ArrayCollection();
         $this->event = new ArrayCollection();
         $this->passwordResetTokens = new ArrayCollection();
     }
@@ -131,6 +126,8 @@ class User implements UserInterface, PasswordAuthenticatedUserInterface
         return $this->reservations;
     }
 
+
+
     public function addReservation(Reservation $reservation): static
     {
         if (!$this->reservations->contains($reservation)) {
@@ -144,7 +141,7 @@ class User implements UserInterface, PasswordAuthenticatedUserInterface
 
 
 
-    public function eraseCredentials()
+    public function eraseCredentials(): void
     {
         // TODO: Implement eraseCredentials() method.
     }
@@ -179,19 +176,13 @@ class User implements UserInterface, PasswordAuthenticatedUserInterface
         return $this;
     }
 
-    /**
-     * @return Collection<int, Reservation>
-     */
-    public function getReservation(): Collection
-    {
-        return $this->reservation;
-    }
+
 
 
 
     public function removeReservation(Reservation $reservation): static
     {
-        if ($this->reservation->removeElement($reservation)) {
+        if ($this->reservations->removeElement($reservation)) {
             // set the owning side to null (unless already changed)
             if ($reservation->getUser() === $this) {
                 $reservation->setUser(null);
