@@ -15,6 +15,7 @@ use Symfony\Component\Routing\Attribute\Route;
 use Symfony\Component\Form\Extension\Core\Type\TextType;
 use Symfony\Component\Form\Extension\Core\Type\TextareaType;
 use Symfony\Component\Form\Extension\Core\Type\SubmitType;
+use Symfony\Component\Security\Http\Attribute\IsGranted;
 
 class EventsController extends AbstractController
 {
@@ -30,9 +31,10 @@ class EventsController extends AbstractController
 
 
     #[Route('/events', name: 'app_event')]
+    #[IsGranted("ROLE_PARTICIPANT")]
     public function listEvents(EventsRepository $er): Response
 
-    {   $this->denyAccessUnlessGranted('ROLE_ADMIN');
+    {  // $this->denyAccessUnlessGranted('ROLE_ADMIN');
         $events = $er->findAll();
         return $this->render('events/listEvents.html.twig', [
             'events' => $events,
@@ -70,7 +72,7 @@ class EventsController extends AbstractController
     }
     #[Route('/events/new', name: 'app_new')]
     public function new(Request $request, EntityManagerInterface $em): Response
-    {    $this->denyAccessUnlessGranted('ROLE_ADMIN');
+    {   // $this->denyAccessUnlessGranted('ROLE_ADMIN');
         $event = new Events();
 
         $form = $this->createForm(EventType::class, $event);

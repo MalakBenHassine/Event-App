@@ -15,7 +15,7 @@ services:
     build: php
     container_name: www_docker_gitlab
     ports:
-      - "8080:80"
+      - "8081:80"
     volumes:
       - ./php/vhosts:/etc/apache2/sites-enabled
       - ../:/var/www
