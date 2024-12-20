@@ -9,7 +9,62 @@ stages:
   - coding_standards
   - test
   - build_and_push
+security-checker:
+  stage: security
+  before_script:
+   -composer install
+  script:
+    - composer self_update
+    - composer audit
+  allow_failure: true
 
+phpcs:
+  stage: coding_standards
+  script:
+    - composer install --prefer-dist --no-progress --no-suggest
+    - phpcs -v --standard=PSR12 --ignore=./src/Kernel.php ./src
+  allow_failure: true
+
+phpstan:
+  stage: coding_standards
+  script:
+    - composer install --prefer-dist --no-progress --no-suggest
+    - phpstan analyse ./src
+  allow_failure: true
+
+twig-lint:
+  stage: coding_standards
+  before_script:
+   -composer install
+  script:
+    - twig-lint lint ./templates
+  allow_failure: true
+
+phpunit:
+  stage: test
+  services:
+    - name: mysql:5.7
+      alias: mysql
+  variables:
+    MYSQL_ROOT_PASSWORD: pass_test
+    MYSQL_DATABASE: integration
+    MYSQL_USER: integration
+    MYSQL_PASSWORD: integration
+    DATABASE_URL: 'mysql://root:pass_test@mysql:3306/integration'
+  before_script:
+    - apt-get update && apt-get install -y git libzip-dev
+    - docker-php-ext-install mysqli pdo pdo_mysql zip
+    - composer install --prefer-dist --no-progress --no-suggest
+    - php bin/console doctrine:database:drop --if-exists --force --env=test
+    - php bin/console doctrine:database:create --env=test
+    - php bin/console doctrine:migration:migrate --env=test --no-interaction
+  script:
+    - php bin/phpunit --testdox --coverage-text --coverage-clover=coverage.xml
+  artifacts:
+    paths:
+      - coverage.xml
+    expire_in: 1 week
+  allow_failure: true
 
 docker-build-and-push:
   stage: build_and_push
