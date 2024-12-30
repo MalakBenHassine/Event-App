@@ -2,6 +2,7 @@
 
 namespace App\Controller;
 
+use App\Repository\EventsRepository;
 use Symfony\Bundle\FrameworkBundle\Controller\AbstractController;
 use Symfony\Component\HttpFoundation\Response;
 use Symfony\Component\Routing\Attribute\Route;
@@ -31,10 +32,12 @@ class SecurityController extends AbstractController
         ]);
     }
     #[Route(path: '/home', name: 'app_home')]
-    public function home(): Response
+    public function home(EventsRepository $er): Response
     {
         //throw new \LogicException('This method can be blank - it will be intercepted by the logout key on your firewall.');
-        return $this->render('Home.html.twig',
+        return $this->render('Home.html.twig',[
+            "events"=> $er->findAll(),
+            ]
         );
     }
 

@@ -3,8 +3,20 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <meta charset="utf-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1, shrink-to-fit=no">
+    <meta name="description" content="">
+    <meta name="author" content="Tooplate">
+    <link href="https://fonts.googleapis.com/css?family=Poppins:100,100i,200,200i,300,300i,400,400i,500,500i,600,600i,700,700i,800,800i,900,900i&display=swap" rel="stylesheet">
     <title>{% block title %}Welcome{% endblock %}</title>
+    <!-- Additional CSS Files -->
+    <link rel="stylesheet" type="text/css" href="{{ asset('assets/css/bootstrap.min.css') }}">
 
+    <link rel="stylesheet" type="text/css" href="{{ asset('assets/css/font-awesome.css') }}">
+
+    <link rel="stylesheet" type="text/css" href="{{ asset('assets/css/owl-carousel.css') }}">
+
+    <link rel="stylesheet" href="{{ asset('assets/css/tooplate-artxibition.css') }}">
     {# Bootstrap CSS #}
     <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/css/bootstrap.min.css" rel="stylesheet">
 
@@ -12,10 +24,57 @@
     <link rel="stylesheet" href="{{ asset('css/styles.css') }}">
 </head>
 <body>
-{% if app.user %}
-    <div class="mb-3">
-        You are logged in as {{ app.user.name }}, <a href="{{ path('app_logout') }}">Logout</a>
+<header class="header-area header-sticky">
+    <div class="container" >
+        <div  >
+            <div class="col-30" >
+                <nav class="main-nav">
+                    <!-- ***** Logo Start ***** -->
+                    <a href="{{ asset('index.html') }}" class="logo">My<em>Event</em></a>
+                    <!-- ***** Logo End ***** -->
+
+                    <!-- ***** Menu Start ***** -->
+                    <ul class="nav">
+                        <li><a href="{{ asset('index.html') }}">UpComing Events</a></li>
+
+                        {% if is_granted('ROLE_ORGANIZER') %}
+                            <li><a href="{{ asset('rent-venue.html') }}">Locals</a></li>
+                        {% endif %}
+
+                        {% if is_granted('ROLE_LOCATOR') %}
+                            <li><a href="{{ asset('rent-venue.html') }}">My Locals</a></li>
+                        {% endif %}
+
+                        {% if is_granted('ROLE_PARTICIPANT') %}
+                            <li><a href="{{ asset('myEventUser.html') }}">My Events</a></li>
+                        {% endif %}
+
+                        {% if is_granted('ROLE_ORANIZER') %}
+                            <li><a href="{{ asset('myEventOrg.html') }}">My Events</a></li>
+                        {% endif %}
+
+                        <li><a href="{{ asset('contact.html') }}">Contact Us</a></li>
+
+                        <!-- Login aligned to the right -->
+                        {% if app.user %}
+                            <li class="right-align"><a href="{{path('app_logout') }}"><i class="fa fa-fw fa-user"></i>{{ app.user.name }} Logout</a></li>
+                        {% else %}
+                            <li class="right-align"><a href="{{ path('app_login') }}"><i class="fa fa-fw fa-user"></i>Login</a></li>
+
+                        {% endif %}
+                    </ul>
+
+                    <!-- Menu Trigger (for mobile view) -->
+
+                    <!-- ***** Menu End ***** -->
+                </nav>
+
+            </div>
+        </div>
     </div>
+</header>
+{% if app.user %}
+
 {% endif %}
 <header>
     {# Optional: Add a navbar or site header here #}

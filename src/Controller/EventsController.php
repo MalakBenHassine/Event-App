@@ -26,13 +26,13 @@ class EventsController extends AbstractController
 {
 
 
-
-    #[Route('/home', name: 'app_home')]
-    public function home(): Response
-    {
-        return $this->render('events/home.html.twig');
-    }
-
+    /*#[Route('/home', name: 'app_home')]
+    public function home(EventsRepository $er): Response
+    {  $events = $er->findAll();
+        return $this->render('events/Home.html.twig',[
+           'events' => $events,
+        ]);
+    }*/
 
 
     #[Route('/events', name: 'app_event')]
@@ -46,6 +46,7 @@ class EventsController extends AbstractController
             'value' => "",
         ]);
     }
+
     #[Route('/liste-des-events', name: 'app_user_event_list')]
     public function listUserEvents(EventsRepository $er): Response
     {
@@ -75,6 +76,7 @@ class EventsController extends AbstractController
             'value' => $value,
         ]);
     }
+
     #[Route('/events/new', name: 'app_new')]
     public function new(Request $request, EntityManagerInterface $em): Response
     {
@@ -94,6 +96,7 @@ class EventsController extends AbstractController
             'formE' => $form->createView(),
         ]);
     }
+
     #[Route('/send-reminder', name: 'app_send_reminder')]
     public function sendReminder(EmailVerifier $emailService): Response
     {
@@ -130,7 +133,6 @@ class EventsController extends AbstractController
     }
 
 
-
     // Delete Event
     #[Route('/events/delete/{id}', name: 'app_event_delete', methods: ['POST'])]
     public function deleteEvent(Request $request, Events $event, EntityManagerInterface $em): Response
@@ -142,37 +144,12 @@ class EventsController extends AbstractController
 
         return $this->redirectToRoute('app_event');
     }
-    #[Route(path: '/forgot-password', name: 'app_forgot_password')]
-    public function forgotPassword(Request $request, UserRepository $userRepository, MailerInterface $mailer, EntityManagerInterface $entityManager): Response
-    {
-        // Logique pour récupérer l'utilisateur par e-mail
-        $email = $request->request->get('email');
-        $user = $userRepository->findOneBy(['email' => $email]);
-
-        if ($user) {
-            // Générer un token et l'enregistrer dans la base de données
-            $resetToken = bin2hex(random_bytes(32));
-
-            // Créer l'entité PasswordResetToken
-            $passwordResetToken = new PasswordResetToken();
-            $passwordResetToken->setUser($user);
-            $passwordResetToken->setToken($resetToken);
-            $passwordResetToken->setExpiresAt(new \DateTime('+1 hour')); // Token valable 1 heure
-
-            // Enregistrer le token dans la base de données
-            $entityManager->persist($passwordResetToken);
-            $entityManager->flush();
-
-            // Créer un lien de réinitialisation avec une URL absolue
-            $resetLink = $this->generateUrl(
-                'app_reset_password',
-                ['token' => $resetToken],
-                \Symfony\Component\Routing\Generator\UrlGeneratorInterface::ABSOLUTE_URL
-            );
-
-
-
-
 
 
 }
+
+
+
+
+
+

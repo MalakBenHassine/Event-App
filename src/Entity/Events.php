@@ -25,6 +25,9 @@ private ?string $description = null;
 #[ORM\ManyToOne(targetEntity: Local::class, inversedBy: "events")]
 #[ORM\JoinColumn(nullable: false)]
 private ?Local $local = null;
+#[ORM\Column(length: 255)]
+
+private array $category=[];
 
 public function getId(): ?int
 {
@@ -87,5 +90,18 @@ return $this->local;
     {
 
         return $this->name ?? 'Event'; }
+
+    public function getCategory(): array
+    {
+        return $this->category;
+    }
+
+    public function setCategory(array $category): void
+    {
+        $this->category = $category;
+    }
+
+
+
 
 }

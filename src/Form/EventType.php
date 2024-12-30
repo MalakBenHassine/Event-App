@@ -5,6 +5,8 @@ namespace App\Form;
 use App\Entity\Events;
 use App\Entity\Local;
 use Symfony\Component\Form\AbstractType;
+use Symfony\Component\Form\CallbackTransformer;
+use Symfony\Component\Form\Extension\Core\Type\ChoiceType;
 use Symfony\Component\Form\Extension\Core\Type\TextType;
 use Symfony\Component\Form\Extension\Core\Type\DateType;
 use Symfony\Component\Form\Extension\Core\Type\TextareaType;
@@ -32,6 +34,14 @@ class EventType extends AbstractType
                     'class' => 'form-control',
                 ],
             ])
+            ->add("category", ChoiceType::class, [
+                "choices" => [
+                    "party" => "Party",
+                    "formation" => "formation",
+                    "conference" => "conference"
+                ]
+            ])
+
 
             ->add('local', EntityType::class, [
                 'class' => Local::class,
@@ -52,6 +62,17 @@ class EventType extends AbstractType
                 ],
 
             ]);
+        $builder->get("category")->addModelTransformer(new CallbackTransformer(
+            function ($tagsAsArray): string {
+                return implode(",", $tagsAsArray);
+            },
+            function ($tagsAsArray): array {
+                return explode(",", $tagsAsArray);
+            }
+        ));
+
+
+
 
     }
 
