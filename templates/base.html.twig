@@ -35,7 +35,7 @@
 
                     <!-- ***** Menu Start ***** -->
                     <ul class="nav">
-                        <li><a href="{{ asset('index.html') }}">UpComing Events</a></li>
+                        <li><a href="{{ path('app_event') }}">UpComing Events</a></li>
 
                         {% if is_granted('ROLE_ORGANIZER') %}
                             <li><a href="{{ asset('rent-venue.html') }}">Locals</a></li>

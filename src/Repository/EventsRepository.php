@@ -45,4 +45,31 @@ class EventsRepository extends ServiceEntityRepository
                ->getQuery()
                ->getOneOrNullResult()
             ;}
- }
+    public function findByFilters(?string $name, ?string $category, ?string $local, ?\DateTime $dateFrom): array
+    {
+        $qb = $this->createQueryBuilder('e');
+
+        if ($name) {
+            $qb->andWhere('e.nom LIKE :name')
+                ->setParameter('name', '%' . $name . '%');
+        }
+
+        if ($category) {
+            $qb->andWhere('JSON_CONTAINS(e.category, :category) = 1')
+                ->setParameter('category', json_encode([$category]));
+        }
+
+        if ($local) {
+            $qb->andWhere('e.local = :local')
+                ->setParameter('local', $local);
+        }
+
+        if ($dateFrom) {
+            $qb->andWhere('e.date >= :dateFrom')
+                ->setParameter('dateFrom', $dateFrom);
+        }
+
+        return $qb->getQuery()->getResult();
+    }
+
+}

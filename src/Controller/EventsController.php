@@ -3,15 +3,18 @@
 namespace App\Controller;
 
 use App\Entity\PasswordResetToken;
+use App\Repository\LocalRepository;
 use App\Repository\PasswordResetTokenRepository;
 use App\Repository\UserRepository;
 use App\Security\EmailVerifier;
+use DateTime;
 use Doctrine\DBAL\Types\Types;
 
 use App\Entity\Events;
 use App\Form\EventType;
 use App\Repository\EventsRepository;
 use Doctrine\ORM\EntityManagerInterface;
+use Exception;
 use Symfony\Bundle\FrameworkBundle\Controller\AbstractController;
 use Symfony\Component\HttpFoundation\Request;
 use Symfony\Component\HttpFoundation\Response;
@@ -36,14 +39,32 @@ class EventsController extends AbstractController
 
 
     #[Route('/events', name: 'app_event')]
-    public function listEvents(EventsRepository $er): Response
+    public function listEvents(Request $request, EventsRepository $er,LocalRepository $localRepository): Response
 
     {  // $this->denyAccessUnlessGranted('ROLE_ADMIN');
-        $events = $er->findAll();
-        return $this->render('events/listEvents.html.twig', [
+        $name = $request->query->get('name');
+        $dateFromString = $request->query->get('date_from');
+        $category = $request->query->get('category');
+        $local = $request->query->get('local');
+        $dateFrom = null;
+
+        if ($dateFromString) {
+            try {
+                $dateFrom = new DateTime($dateFromString);
+            } catch (Exception $e) {
+                // Handle invalid date format if necessary
+                $this->addFlash('error', 'Invalid date format.');
+            }
+        }
+
+        $events = $er->findByFilters($name, $category, $local, $dateFrom);
+        $locations = $localRepository->findAll();
+        //$events = $er->findAll();
+        return $this->render('events/shows-events.html.twig', [
             'events' => $events,
             'field' => "",
             'value' => "",
+            "locations"=>$locations
         ]);
     }
 
