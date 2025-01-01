@@ -9,7 +9,6 @@ use Symfony\Component\OptionsResolver\OptionsResolver;
 use Symfony\Component\Form\Extension\Core\Type\TextareaType;
 use Symfony\Component\Form\Extension\Core\Type\NumberType;
 
-
 class LocalType extends AbstractType
 {
     public function buildForm(FormBuilderInterface $builder, array $options): void
@@ -36,7 +35,6 @@ class LocalType extends AbstractType
                 ],
             ])
         ;
-
     }
 
     public function configureOptions(OptionsResolver $resolver): void
