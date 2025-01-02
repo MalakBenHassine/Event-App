@@ -43,6 +43,7 @@
 
                         {% if is_granted('ROLE_LOCATOR') %}
                             <li><a href="{{ asset('rent-venue.html') }}">My Locals</a></li>
+
                         {% endif %}
 
                         {% if is_granted('ROLE_PARTICIPANT') %}
@@ -51,9 +52,13 @@
 
                         {% if is_granted('ROLE_ORANIZER') %}
                             <li><a href="{{ asset('myEventOrg.html') }}">My Events</a></li>
+                            <li><a href="{{ path('app_new') }}">Create event</a></li>
+
                         {% endif %}
+                        <li><a href="{{ path('app_local_new') }}">Create Local</a></li>
 
                         <li><a href="{{ asset('contact.html') }}">Contact Us</a></li>
+
 
                         <!-- Login aligned to the right -->
                         {% if app.user %}
