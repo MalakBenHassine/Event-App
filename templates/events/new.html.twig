@@ -1,40 +1,171 @@
 {% extends 'base.html.twig' %}
 
-{% block title %}Create Event{% endblock %}
 
-{% block body %}
-    <h1 class="text-center mb-4">Create New Event</h1>
+<head>
+    <meta charset="utf-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1, shrink-to-fit=no">
+    <meta name="description" content="">
+    <meta name="author" content="Tooplate">
+    <link href="https://fonts.googleapis.com/css?family=Poppins:100,100i,200,200i,300,300i,400,400i,500,500i,600,600i,700,700i,800,800i,900,900i&display=swap" rel="stylesheet">
 
-    {{ form_start(formE, {'attr': {'class': 'custom-event-form'}}) }}
+    <title>ArtXibition Template - Event Detail Page</title>
+
+    <!-- Additional CSS Files -->
+    <link rel="stylesheet" href="{{ asset('assets/css/bootstrap.min.css') }}">
+    <link rel="stylesheet" href="{{ asset('assets/css/font-awesome.css') }}">
+    <link rel="stylesheet" href="{{ asset('assets/css/owl-carousel.css') }}">
+    <link rel="stylesheet" href="{{ asset('assets/css/tooplate-artxibition.css') }}">
+</head>
+
+<body>
+<!-- ***** Preloader Start ***** -->
+<div id="js-preloader" class="js-preloader">
+    <div class="preloader-inner">
+        <span class="dot"></span>
+        <div class="dots">
+            <span></span>
+            <span></span>
+            <span></span>
+        </div>
+    </div>
+</div>
+<!-- ***** Preloader End ***** -->
+
+<!-- ***** Pre Header ***** -->
+<div class="pre-header">
     <div class="container">
-        <div class="row mb-3">
-            <div class="col-md-6">
-                {{ form_row(formE.nom) }}
+        <div class="row">
+            <div class="col-lg-6 col-sm-6">
+                <span>Hey! The Show Is Starting In 5 Days.</span>
             </div>
-            <div class="col-md-6">
-                {{ form_row(formE.date) }}
-            </div>
-        </div>
-
-        <div class="row mb-3">
-            <div class="col-md-12">
-                {{ form_row(formE.local) }}
-            </div>
-        </div>
-
-        <div class="row mb-3">
-            <div class="col-md-12">
-                {{ form_row(formE.description) }}
-            </div>
-        </div>
-
-        <div class="row mb-3">
-            <div class="col-md-12 text-center">
-                {{ form_widget(formE.save) }}
+            <div class="col-lg-6 col-sm-6">
+                <div class="text-button">
+                    <a href="rent-venue.html">Contact Us Now! <i class="fa fa-arrow-right"></i></a>
+                </div>
             </div>
         </div>
     </div>
-    {{ form_end(formE) }}
+</div>
+
+<!-- ***** Header Area Start ***** -->
+<header class="header-area header-sticky">
+    <div class="container">
+        <div class="row">
+            <div class="col-12">
+                <nav class="main-nav">
+                    <!-- Add your navigation here -->
+                </nav>
+            </div>
+        </div>
+    </div>
+</header>
+<!-- ***** Header Area End ***** -->
+
+<!-- ***** About Us Page ***** -->
+<div class="page-heading-rent-venue">
+    <div class="container">
+        <div class="row">
+            <div class="col-lg-12">
+                <h2>Create Events</h2>
+            </div>
+        </div>
+    </div>
+</div>
+
+<div class="events-form" style="padding-top: 50px;">
+    <div class="container">
+        <div class="row">
+            <div class="col-lg-12">
+                <form action="{{ path('add_event') }}" method="POST" class="form-group">
+                    <div class="row">
+                        <div class="col-lg-6">
+                            <label for="eventName">Event Name</label>
+                            <input type="text" id="eventName" name="eventName" class="form-control" placeholder="Enter event name" required>
+                        </div>
+                        <div class="col-lg-6">
+                            <label for="eventDate">Event Date</label>
+                            <input type="date" id="eventDate" name="eventDate" class="form-control" required>
+                        </div>
+                    </div>
+                    <div class="row">
+                        <div class="col-lg-6">
+                            <label for="eventLocation">Event Location</label>
+                            <input type="text" id="eventLocation" name="eventLocation" class="form-control" placeholder="Enter event location" required>
+                        </div>
+                        <div class="col-lg-6">
+                            <label for="ticketsAvailable">Tickets Available</label>
+                            <input type="number" id="ticketsAvailable" name="ticketsAvailable" class="form-control" placeholder="Number of tickets" required>
+                        </div>
+                    </div>
+                    <div class="row">
+                        <div class="col-lg-6">
+                            <label for="ticketPrice">Ticket Price</label>
+                            <input type="number" id="ticketPrice" name="ticketPrice" class="form-control" placeholder="Ticket price" required>
+                        </div>
+                    </div>
+                    <div class="row">
+                        <div class="col-lg-12">
+                            <label for="eventDescription">Event Description</label>
+                            <textarea id="eventDescription" name="eventDescription" class="form-control" rows="4" placeholder="Enter event description" required></textarea>
+                        </div>
+                    </div>
+                    <div class="row">
+                        <div class="col-lg-12 text-center">
+                            <button type="submit" class="btn main-dark-button">Add Event</button>
+                        </div>
+                    </div>
+                </form>
+            </div>
+        </div>
+    </div>
+</div>
+
+<!-- *** Footer *** -->
+<footer>
+    <div class="container">
+        <div class="row">
+            <div class="col-lg-4">
+                <!-- Add content if needed -->
+            </div>
+            <div class="col-lg-12">
+                <div class="sub-footer">
+                    <div class="row">
+                        <div class="col-lg-3">
+                            <div class="logo"><span>Art<em>Xibition</em></span></div>
+                        </div>
+                        <div class="col-lg-6">
+                            <div class="menu">
+                                <ul>
+                                    <li><a href="{{ path('homepage') }}" class="active">Home</a></li>
+                                    <li><a href="{{ path('about') }}">About Us</a></li>
+                                    <li><a href="{{ path('rent_venue') }}">Rent Venue</a></li>
+                                    <li><a href="{{ path('shows_events') }}">Shows & Events</a></li>
+                                    <li><a href="{{ path('tickets') }}">Tickets</a></li>
+                                </ul>
+                            </div>
+                        </div>
+                        <div class="col-lg-3">
+                            <!-- Add content if needed -->
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+</footer>
+
+<!-- Scripts -->
+<script src="{{ asset('assets/js/jquery-2.1.0.min.js') }}"></script>
+<script src="{{ asset('assets/js/popper.js') }}"></script>
+<script src="{{ asset('assets/js/bootstrap.min.js') }}"></script>
+<script src="{{ asset('assets/js/scrollreveal.min.js') }}"></script>
+<script src="{{ asset('assets/js/waypoints.min.js') }}"></script>
+<script src="{{ asset('assets/js/jquery.counterup.min.js') }}"></script>
+<script src="{{ asset('assets/js/imgfix.min.js') }}"></script>
+<script src="{{ asset('assets/js/mixitup.js') }}"></script>
+<script src="{{ asset('assets/js/accordions.js') }}"></script>
+<script src="{{ asset('assets/js/owl-carousel.js') }}"></script>
+<script src="{{ asset('assets/js/custom.js') }}"></script>
+</body>
 
 {% endblock %}
-
