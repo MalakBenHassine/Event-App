@@ -82,11 +82,20 @@ header, nav, section, article, aside, footer, hgroup {
 html, body {
   font-family: 'Poppins', sans-serif;
   font-weight: 400;
-  background-color: #fff;
+  background-color: #f8f9fa;
   font-size: 16px;
   -ms-text-size-adjust: 100%;
   -webkit-font-smoothing: antialiased;
   -moz-osx-font-smoothing: grayscale;
+  height: 100%;
+  width: 100%;
+  margin: 0;
+  padding: 0;
+
+  justify-content: center;
+  background-size: cover;
+  background-position: center;
+  background-repeat: no-repeat;
 }
 
 a {
@@ -133,6 +142,7 @@ body {
   background: #343a3e;
   color: #fff;
 }
+
 
 @media (max-width: 991px) {
   html, body {

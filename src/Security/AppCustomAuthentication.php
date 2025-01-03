@@ -49,12 +49,12 @@ class AppCustomAuthentication extends AbstractLoginFormAuthenticator
         }
         $user=$token->getUser();
         if(in_array("ROLE_PARTICIPANT",$user->getRoles(),true)){
-            return new RedirectResponse($this->urlGenerator->generate('app_event'));
+            return new RedirectResponse($this->urlGenerator->generate('app_home'));
         }
         if(in_array("ROLE_ORGANIZER",$user->getRoles(),true)){
-            return new RedirectResponse($this->urlGenerator->generate('app_new'));
+            return new RedirectResponse($this->urlGenerator->generate('app_home'));
         }
-        return new RedirectResponse($this->urlGenerator->generate('app_local_index'));
+        return new RedirectResponse($this->urlGenerator->generate('app_home'));
 
 
 // For example:

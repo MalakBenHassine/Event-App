@@ -151,6 +151,7 @@
                     <h2>Our Venues & Tickets</h2>
                 </div>
             </div>
+            {%if length(events)>3%}
             {% for e in 0..2 %}
                 <div class="col-lg-4">
                     <div class="venue-item">
@@ -189,6 +190,7 @@
                     </div>
                 </div>
             {% endfor %}
+            {% endif %}
 
         </div>
     </div>
