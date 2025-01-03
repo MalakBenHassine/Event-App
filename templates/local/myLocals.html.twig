@@ -12,7 +12,7 @@
         <meta name="author" content="Tooplate">
         <link href="https://fonts.googleapis.com/css?family=Poppins:100,100i,200,200i,300,300i,400,400i,500,500i,600,600i,700,700i,800,800i,900,900i&display=swap" rel="stylesheet">
 
-        <title>My Events</title>
+        <title>My Locals</title>
 
 
         <!-- Additional CSS Files -->
@@ -60,11 +60,12 @@
     <!-- ***** Header Area End ***** -->
 
     <!-- ***** About Us Page ***** -->
-    <div class="page-heading-shows-events">
+    <div class="page-heading-rent-venue">
         <div class="container">
             <div class="row">
                 <div class="col-lg-12">
-                    <h2>My Events</h2>
+                    <h2>Our Locals</h2>
+                    <span>Your ideal shows & events destination .</span>
                 </div>
             </div>
         </div>
@@ -77,71 +78,45 @@
 
                 <div class="col-lg-12">
                     <div class="section-heading">
-                        <h2>List Event</h2>
+                        <h2>List Local</h2>
                     </div>
                 </div>
                 <div class="col-lg-12 mb-4">
                     <ul>
-                        <li class="list-group-item border-bottom">
-                            <div class="row">
-                                <div class="col-lg-1">
-                                    <div class="title">
-                                        <span>ID</span>
-                                    </div>
-                                </div>
-                                <div class="col-lg-2">
-                                    <div class="title">
-                                        <span>Name</span>
-                                    </div>
-                                </div>
-                                <div class="col-lg-3">
-                                    <div class="time"><span>Date</span></div>
-                                </div>
-                                <div class="col-lg-2">
-                                    <div class="title">
-                                        <span>Category</span>
-                                    </div>
-                                </div>
-                                <div class="col-lg-2">
-                                    <div class="title">
-                                        <span>Name of local</span>
-                                    </div>
-                                </div>
-                                <div class="col-lg-2">
-                                    <div class="title">
-                                        <span>Action</span>
-                                    </div>
-                                </div>
-                            </div>
-                        </li>
-                        {% for event in events %}
-
+                        {% for local in locals %}
                             <li class="list-group-item border-bottom">
                                 <div class="row">
                                     <div class="col-lg-1">
                                         <div class="title">
-                                            <span>{{ event.id }}</span>
-                                        </div>
-                                    </div>
-                                    <div class="col-lg-2">
-                                        <div class="title">
-                                            <span>{{ event.nom }}</span>
+                                            <span>{{ local.id }}</span>
                                         </div>
                                     </div>
                                     <div class="col-lg-3">
-                                        <div class="time">{{ event.date|date('d-m-Y H:i') }}</span></div>
-                                    </div>
-                                    <div class="col-lg-2">
-                                        <div class="place">{{ event.nom }}</span></div>
-                                    </div>
-                                    <div class="col-lg-2">
                                         <div class="title">
-                                            <span>{{ event.local.name}}</span>
+                                            <span><i class="fa fa-building"></i>{{ local.name }}</span>
+                                        </div>
+                                    </div>
+                                    <div class="col-lg-2">
+                                        <div class="time"><span><i class="fa fa-users"></i>{{ local.capacite }}</span></div>
+                                    </div>
+                                    <div class="col-lg-3">
+                                        <div class="place"><span><i class="fa fa-map-marker"></i>{{ local.adr }}</span></div>
+                                    </div>
+                                    <div class="col-lg-1">
+                                        <div class="title">
+                                             <span>
+                                            {% if local.available %}
+                                                <i class="fa fa-check-circle text-success"></i>
+                                            {% else %}
+                                                <i class="fa fa-times-circle text-danger"></i>
+                                            {% endif %}
+                                        </span>
                                         </div>
                                     </div>
                                     <div class="col-lg-2">
                                         <div class="main-dark-button">
-                                            <a href="{{ path('app_event_edit', {'id': event.id}) }}">edit</a>
+                                            <a href="{{ path('app_local_show', {'id': local.id}) }}">show</a>
+                                            <a href="{{ path('app_local_edit', {'id': local.id}) }}">edit</a>
                                         </div>
                                     </div>
                                 </div>

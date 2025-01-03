@@ -30,19 +30,18 @@
             <div class="col-30" >
                 <nav class="main-nav">
                     <!-- ***** Logo Start ***** -->
-                    <a href="{{ asset('index.html') }}" class="logo">My<em>Event</em></a>
+                    <a href="{{ path('app_home') }}" class="logo">My<em>Event</em></a>
                     <!-- ***** Logo End ***** -->
 
                     <!-- ***** Menu Start ***** -->
                     <ul class="nav">
                         <li><a href="{{ path('app_event') }}">UpComing Events</a></li>
 
-                        {% if is_granted('ROLE_ORGANIZER') %}
-                            <li><a href="{{ asset('rent-venue.html') }}">Locals</a></li>
-                        {% endif %}
+
 
                         {% if is_granted('ROLE_LOCATOR') %}
                             <li><a href="{{ asset('rent-venue.html') }}">My Locals</a></li>
+                            <li><a href="{{ path('app_local_new') }}">Create Local</a></li>
 
                         {% endif %}
 
@@ -50,19 +49,21 @@
                             <li><a href="{{ asset('myEventUser.html') }}">My Events</a></li>
                         {% endif %}
 
-                        {% if is_granted('ROLE_ORANIZER') %}
+                        {% if is_granted('ROLE_ORGANIZER') %}
                             <li><a href="{{ asset('myEventOrg.html') }}">My Events</a></li>
                             <li><a href="{{ path('app_new') }}">Create event</a></li>
+                            <li><a href="{{ asset('rent-venue.html') }}">Locals</a></li>
 
                         {% endif %}
-                        <li><a href="{{ path('app_local_new') }}">Create Local</a></li>
+
 
                         <li><a href="{{ asset('contact.html') }}">Contact Us</a></li>
 
 
                         <!-- Login aligned to the right -->
                         {% if app.user %}
-                            <li class="right-align"><a href="{{path('app_logout') }}"><i class="fa fa-fw fa-user"></i>{{ app.user.name }} Logout</a></li>
+                            <div><h3 style="color: #0c5460">{{ app.user.name }}</h3><a href="{{path('app_logout') }}"><h5 style="color: #1b1e21"><i style="color: #1d2124" class="fa fa-fw fa-user"></i>Logout</h5></a>
+                            </div>
                         {% else %}
                             <li class="right-align"><a href="{{ path('app_login') }}"><i class="fa fa-fw fa-user"></i>Login</a></li>
 
@@ -89,8 +90,83 @@
     {% block body %}{% endblock %}
 </main>
 
-<footer class="text-center mt-5">
-    <p>&copy; 2025 Your Website</p>
+<footer>
+    <div class="container">
+        <div class="row">
+            <div class="col-lg-4">
+                <div class="address">
+                    <h4>Sunny Hill Festival Address</h4>
+                    <span>5 College St NW, <br>Norcross, GA 30071<br>United States</span>
+                </div>
+            </div>
+            <div class="col-lg-4">
+                <div class="links">
+                    <h4>Useful Links</h4>
+                    <ul>
+                        <li><a href="#">Info</a></li>
+                        <li><a href="#">Venues</a></li>
+                        <li><a href="#">Guides</a></li>
+                        <li><a href="#">Videos</a></li>
+                        <li><a href="#">Outreach</a></li>
+                    </ul>
+                </div>
+            </div>
+            <div class="col-lg-4">
+                <div class="hours">
+                    <h4>Open Hours</h4>
+                    <ul>
+                        <li>Mon to Fri: 10:00 AM to 8:00 PM</li>
+                        <li>Sat - Sun: 11:00 AM to 4:00 PM</li>
+                        <li>Holidays: Closed</li>
+                    </ul>
+                </div>
+            </div>
+            <div class="col-lg-12">
+                <div class="under-footer">
+                    <div class="row">
+                        <div class="col-lg-6">
+                            <p>Ariana, Tunisia</p>
+                        </div>
+                        <div class="col-lg-6">
+                            <p class="copyright">Copyright 2024 MyEvent Company
+
+                                <br>Design: <a rel="nofollow" href="https://www.tooplate.com" target="_parent">Tooplate</a></p>
+                        </div>
+                    </div>
+                </div>
+            </div>
+            <div class="col-lg-12">
+                <div class="sub-footer">
+                    <div class="row">
+                        <div class="col-lg-3">
+                            <div class="logo"><span>MY<em>Event</em></span></div>
+                        </div>
+                        <div class="col-lg-6">
+                            <div class="menu">
+                                <ul>
+                                    <li><a href="index.html" class="active">Home</a></li>
+                                    <li><a href="about.html">About Us</a></li>
+                                    <li><a href="rent-venue.html">Rent Venue</a></li>
+                                    <li><a href="shows-events.html">Shows & Events</a></li>
+                                    <li><a href="tickets.html">Tickets</a></li>
+                                </ul>
+                            </div>
+                        </div>
+                        <div class="col-lg-3">
+                            <div class="social-links">
+                                <ul>
+                                    <li><a href="#"><i class="fa fa-twitter"></i></a></li>
+                                    <li><a href="#"><i class="fa fa-facebook"></i></a></li>
+                                    <li><a href="#"><i class="fa fa-behance"></i></a></li>
+                                    <li><a href="#"><i class="fa fa-instagram"></i></a></li>
+                                </ul>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
 </footer>
 
 {# Bootstrap JS #}

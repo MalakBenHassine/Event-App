@@ -97,6 +97,48 @@ html, body {
   background-position: center;
   background-repeat: no-repeat;
 }
+.dropdown {
+  position: relative;
+  display: inline-block;
+}
+
+.dropdown-toggle {
+  background-color: #007bff;
+  color: white;
+  border: none;
+  padding: 10px;
+  font-size: 16px;
+  cursor: pointer;
+  display: flex;
+  align-items: center;
+  gap: 5px;
+}
+
+.dropdown-menu {
+  display: none;
+  position: absolute;
+  background-color: #f9f9f9;
+  box-shadow: 0px 8px 16px rgba(0, 0, 0, 0.2);
+  z-index: 1;
+  min-width: 160px;
+  padding: 10px 0;
+}
+
+.dropdown-item {
+  color: black;
+  text-decoration: none;
+  display: block;
+  padding: 8px 16px;
+}
+
+.dropdown-item:hover {
+  background-color: #ddd;
+}
+
+.dropdown:hover .dropdown-menu {
+  display: block;
+}
+
 
 a {
   text-decoration: none !important;
@@ -1699,6 +1741,19 @@ Shows Events Page
   border-bottom: 1px dotted #d7dadc;
   padding-bottom: 30px;
 }
+.category-select {
+  font-family: Arial, sans-serif;
+  padding: 10px;
+  font-size: 14px;
+  background: #f8f9fa;
+  border: 1px solid #ced4da;
+  border-radius: 4px;
+  appearance: none; /* Removes default arrow */
+  background-image: url('data:image/svg+xml;base64,...'); /* Optional: Custom arrow */
+  background-repeat: no-repeat;
+  background-position: right 10px center;
+}
+
 
 .shows-events-tabs .tabs-content .sidebar ul li a {
   font-size: 14px;

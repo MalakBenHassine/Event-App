@@ -14,7 +14,7 @@
     <meta name="author" content="Tooplate">
     <link href="https://fonts.googleapis.com/css?family=Poppins:100,100i,200,200i,300,300i,400,400i,500,500i,600,600i,700,700i,800,800i,900,900i&display=swap" rel="stylesheet">
 
-    <title>ArtXibition Template - Shows and Events Page</title>
+    <title>Shows and Events </title>
 
 
     <!-- Additional CSS Files -->
@@ -33,9 +33,9 @@ https://www.tooplate.com/view/2125-artxibition
 
 -->
     </head>
-    
+
     <body>
-    
+
     <!-- ***** Preloader Start ***** -->
     <div id="js-preloader" class="js-preloader">
       <div class="preloader-inner">
@@ -48,14 +48,14 @@ https://www.tooplate.com/view/2125-artxibition
       </div>
     </div>
     <!-- ***** Preloader End ***** -->
-    
+
     <!-- ***** Pre HEader ***** -->
     <div class="pre-header">
         <div class="container">
 
         </div>
     </div>
-    
+
     <!-- ***** Header Area Start ***** -->
     <header class="header-area header-sticky">
         <div class="container">
@@ -114,7 +114,7 @@ https://www.tooplate.com/view/2125-artxibition
                                                         <div class="month">
                                                             <h6></h6>
                                                             <ul>
-                                                                <li><a ></a></li>
+                                                                <li></li>
                                                                 <li><a ></a></li>
                                                                 <li><a ></a></li>
                                                             </ul>
@@ -147,18 +147,19 @@ https://www.tooplate.com/view/2125-artxibition
                                             <div class="row">
                                                 <div class="container mt-4">
 
-                                                <h2>Sort The Upcoming Shows & Events By:</h2>
+                                                <h5 style="margin: 5px">Sort The Upcoming Shows & Events By:</h5>
                                                 <form method="get" action="{{ path('app_event') }}" class="mb-4">
                                                     <div class="row">
                                                         <div class="col-lg-3">
 
-                                                            <input type="text" name="name" class="form-control" placeholder="Event Name" value="{{ app.request.query.get('name') }}">
+                                                            <input style="background-color:darkslategray; color: white"  type="text" name="name" class="form-control" placeholder="Event Name" value="{{ app.request.query.get('name') }}">
+                                                        </div>
+
+                                                        <div class="col-lg-3">
+                                                            <input style="background-color:darkslategray;color: white" type="date" name="date_from" class="form-control" placeholder="Date From" value="{{ app.request.query.get('date_from') }}">
                                                         </div>
                                                         <div class="col-lg-3">
-                                                            <input type="date" name="date_from" class="form-control" placeholder="Date From" value="{{ app.request.query.get('date_from') }}">
-                                                        </div>
-                                                        <div class="col-lg-3">
-                                                            <select name="category" class="form-control">
+                                                            <select name="category" class="form-control" style="background-color:darkslategray;color: white">
                                                                 <option value="">-- Select Category --</option>
                                                                 <option value="Party" {% if app.request.query.get('category') == 'Party' %}selected{% endif %}>Party</option>
                                                                 <option value="Conference" {% if app.request.query.get('category') == 'Conference' %}selected{% endif %}>Conference</option>
@@ -166,9 +167,9 @@ https://www.tooplate.com/view/2125-artxibition
                                                                 <option value="Formation" {% if app.request.query.get('category') == 'Formation' %}selected{% endif %}>Formation</option>
                                                             </select>
                                                         </div>
-                                                        <div class="col-lg-3">
-                                                            <select name="local" class="form-control">
-                                                                <option value="">-- Select Location --</option>
+                                                        <div class="col-lg-3" style="color: white">
+                                                            <select name="local" class="form-control" style="background-color:darkslategray;color: white" >
+                                                                <option value="" >Location </option>
                                                                 {% for location in locations %}
                                                                     <option value="{{ location.id }}" {% if app.request.query.get('local') == location.id %}selected{% endif %}>{{ location.name }}</option>
                                                                 {% endfor %}
@@ -177,14 +178,29 @@ https://www.tooplate.com/view/2125-artxibition
                                                     </div>
                                                     <div class="row mt-3">
                                                         <div class="col-lg-12">
-                                                            <button type="submit" class="btn btn-primary">Apply Filters</button>
+                                                            <button type="submit" class="btn btn-primary" style="background-color: darkslategrey;border-color: darkslategrey">Apply Filters</button>
                                                             <a href="{{ path('app_event') }}" class="btn btn-secondary">Clear Filters</a>
                                                         </div>
                                                     </div>
                                                 </form>
                                             </div>
+                                                <div class="container" style="margin-left:250px;margin-top: 20px ">
+                                                    <div class="col">
+                                                        <div class="col-lg-100">
+                                                            <div class="main-content">
+                                                                <div class="next-show">
+                                                                    <i class="fa fa-arrow-down"></i>
+                                                                    <span>Discover Events</span>
+                                                                </div>
+
+                                                            </div>
+                                                        </div>
+                                                    </div>
+                                                </div>
+
+                                                
                                                 {% for e in events %}
-                                                    <div class="col-lg-12">
+                                                    <div class="col-lg-12" style="margin-top: 100px">
                                                         <div class="event-item">
                                                             <div class="row">
                                                                 <div class="col-lg-4">
@@ -273,86 +289,9 @@ https://www.tooplate.com/view/2125-artxibition
     </div>
 
     <!-- *** Footer *** -->
-    <footer>
-        <div class="container">
-            <div class="row">
-                <div class="col-lg-4">
-                    <div class="address">
-                        <h4>Sunny Hill Festival Address</h4>
-                        <span>5 College St NW, <br>Norcross, GA 30071<br>United States</span>
-                    </div>
-                </div>
-                <div class="col-lg-4">
-                    <div class="links">
-                        <h4>Useful Links</h4>
-                        <ul>
-                            <li><a href="#">Info</a></li>
-                            <li><a href="#">Venues</a></li>
-                            <li><a href="#">Guides</a></li>
-                            <li><a href="#">Videos</a></li>
-                            <li><a href="#">Outreach</a></li>
-                        </ul>
-                    </div>
-                </div>
-                <div class="col-lg-4">
-                    <div class="hours">
-                        <h4>Open Hours</h4>
-                        <ul>
-                            <li>Mon to Fri: 10:00 AM to 8:00 PM</li>
-                            <li>Sat - Sun: 11:00 AM to 4:00 PM</li>
-                            <li>Holidays: Closed</li>
-                        </ul>
-                    </div>
-                </div>
-                <div class="col-lg-12">
-                    <div class="under-footer">
-                        <div class="row">
-                            <div class="col-lg-6">
-                                <p>São Conrado, Rio de Janeiro</p>
-                            </div>
-                            <div class="col-lg-6">
-                                <p class="copyright">Copyright 2021 ArtXibition Company 
-                    
-                    			<br>Design: <a rel="nofollow" href="https://www.tooplate.com" target="_parent">Tooplate</a></p>
-                            </div>
-                        </div>
-                    </div>
-                </div>
-                <div class="col-lg-12">
-                    <div class="sub-footer">
-                        <div class="row">
-                            <div class="col-lg-3">
-                                <div class="logo"><span>Art<em>Xibition</em></span></div>
-                            </div>
-                            <div class="col-lg-6">
-                                <div class="menu">
-                                    <ul>
-                                        <li><a href="index.html" class="active">Home</a></li>
-                                        <li><a href="about.html">About Us</a></li>
-                                        <li><a href="rent-venue.html">Rent Venue</a></li>
-                                        <li><a href="shows-events.html">Shows & Events</a></li> 
-                                        <li><a href="tickets.html">Tickets</a></li> 
-                                    </ul>
-                                </div>
-                            </div>
-                            <div class="col-lg-3">
-                                <div class="social-links">
-                                    <ul>
-                                        <li><a href="#"><i class="fa fa-twitter"></i></a></li>
-                                        <li><a href="#"><i class="fa fa-facebook"></i></a></li>
-                                        <li><a href="#"><i class="fa fa-behance"></i></a></li>
-                                        <li><a href="#"><i class="fa fa-instagram"></i></a></li>
-                                    </ul>
-                                </div>
-                            </div>
-                        </div>
-                    </div>
-                </div>
-            </div>
-        </div>
-    </footer>
-    
-    
+
+
+
 
     <!-- jQuery -->
     <script src="{{ asset('assets/js/jquery-2.1.0.min.js') }}"></script>
@@ -369,7 +308,7 @@ https://www.tooplate.com/view/2125-artxibition
     <script src="{{ asset('assets/js/mixitup.js') }}"></script>
     <script src="{{ asset('assets/js/accordions.js') }}"></script>
     <script src="{{ asset('assets/js/owl-carousel.js') }}"></script>
-    
+
     <!-- Global Init -->
     <script src="{{ asset('assets/js/custom.js') }}"></script>
 

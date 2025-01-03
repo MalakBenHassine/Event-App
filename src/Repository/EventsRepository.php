@@ -26,6 +26,14 @@ class EventsRepository extends ServiceEntityRepository
 
         return $queryBuilder->getQuery()->getResult();
     }
+    public function findByOrganizer(int $organizerId): array
+    {
+        return $this->createQueryBuilder('e')
+            ->where('e.organizer = :organizerId')
+            ->setParameter('organizerId', $organizerId)
+            ->getQuery()
+            ->getResult();
+    }
     public function findByExampleField($value): array
        {
             return $this->createQueryBuilder('e')

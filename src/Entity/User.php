@@ -37,6 +37,8 @@ class User implements UserInterface, PasswordAuthenticatedUserInterface
      */
     #[ORM\OneToMany(targetEntity: Reservation::class, mappedBy: 'User')]
     private Collection $reservations;
+    #[ORM\OneToMany(targetEntity: Reservation::class, mappedBy: 'events_Organized')]
+    private Collection $events_Organized;
 
     #[ORM\Column(length: 255)]
     private ?string $password = null;
@@ -254,4 +256,17 @@ class User implements UserInterface, PasswordAuthenticatedUserInterface
 
         return $this;
     }
+
+    public function getEventsOrganized(): Collection
+    {
+        return $this->events_Organized;
+    }
+
+    public function setEventsOrganized(Collection $events_Organized): void
+    {
+        $this->events_Organized = $events_Organized;
+    }
+
+
+
 }

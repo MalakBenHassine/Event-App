@@ -25,6 +25,11 @@ private ?string $description = null;
 #[ORM\ManyToOne(targetEntity: Local::class, inversedBy: "events")]
 #[ORM\JoinColumn(nullable: false)]
 private ?Local $local = null;
+    #[ORM\ManyToOne(targetEntity: User::class, inversedBy: "events_Organized")]
+    #[ORM\JoinColumn(nullable: false)]
+    private ?User $organizer ;
+
+
 #[ORM\Column(length: 255)]
 
 private array $category=[];
@@ -99,6 +104,16 @@ return $this->local;
     public function setCategory(array $category): void
     {
         $this->category = $category;
+    }
+
+    public function getOrganizer(): ?User
+    {
+        return $this->organizer;
+    }
+
+    public function setOrganizer(?User $organizer): void
+    {
+        $this->organizer = $organizer;
     }
 
 

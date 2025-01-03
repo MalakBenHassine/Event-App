@@ -55,9 +55,7 @@ class RegistrationController extends AbstractController
             //return $security->login($user, AppCustomAuthenticator::class, 'main');
         }
 
-        return $this->render('registration/registert.html.twig', [
-            'registrationForm' => $form,
-        ]);
+        return $this->redirectToRoute('app_login');
     }
 
     #[Route('/verify/email', name: 'app_verify_email')]

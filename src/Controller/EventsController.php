@@ -15,6 +15,7 @@ use App\Form\EventType;
 use App\Repository\EventsRepository;
 use Doctrine\ORM\EntityManagerInterface;
 use Exception;
+use phpDocumentor\Reflection\Types\Integer;
 use Symfony\Bundle\FrameworkBundle\Controller\AbstractController;
 use Symfony\Component\HttpFoundation\Request;
 use Symfony\Component\HttpFoundation\Response;
@@ -24,9 +25,14 @@ use Symfony\Component\Routing\Attribute\Route;
 use Symfony\Component\Form\Extension\Core\Type\TextType;
 use Symfony\Component\Form\Extension\Core\Type\TextareaType;
 use Symfony\Component\Form\Extension\Core\Type\SubmitType;
+use Symfony\Component\Security\Core\Security;
 
 class EventsController extends AbstractController
 {
+    public function __construct(Security $security)
+    {
+        $this->security = $security;
+    }
 
 
     /*#[Route('/home', name: 'app_home')]
@@ -71,7 +77,12 @@ class EventsController extends AbstractController
     #[Route('/liste-des-events', name: 'app_user_event_list')]
     public function listUserEvents(EventsRepository $er): Response
     {
-        $events = $er->findAll();
+        // Récupérer l'utilisateur connecté
+        $user = $this->security->getUser();
+
+
+        // Récupérer les événements auxquels cet utilisateur est inscrit
+        $events = $er->findByOrganizer((int)$user->getId());  // Ici, getEvents() récupère les événements associés à l'utilisateur
 
         return $this->render('events/user_listEvents.html.twig', [
             'events' => $events,
@@ -108,6 +119,7 @@ class EventsController extends AbstractController
         // Vérifier si le formulaire est soumis et valide
         if ($form->isSubmitted()) {
             if ($form->isValid()) {
+                $event->setOrganizer($this->getUser());
                 $em->persist($event);
                 $em->flush();
                 $this->addFlash('success', 'Événement créé avec succès !');
