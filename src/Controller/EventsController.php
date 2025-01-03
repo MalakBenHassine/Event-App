@@ -112,21 +112,32 @@ class EventsController extends AbstractController
     public function new(Request $request, EntityManagerInterface $em): Response
     {
         $event = new Events();
-
         $form = $this->createForm(EventType::class, $event);
         $form->handleRequest($request);
 
-        if ($form->isSubmitted() && $form->isValid()) {
-            $em->persist($event);
-            $em->flush();
+        // Vérifier si le formulaire est soumis et valide
+        if ($form->isSubmitted()) {
+            if ($form->isValid()) {
+                $em->persist($event);
+                $em->flush();
+                $this->addFlash('success', 'Événement créé avec succès !');
 
-            return $this->redirectToRoute('app_event');
+                return $this->redirectToRoute('app_event');
+            } else {
+                // Afficher les erreurs
+                foreach ($form->getErrors(true) as $error) {
+                    dump($error->getMessage()); // Affiche chaque erreur dans le log
+                }
+                $this->addFlash('error', 'Le formulaire contient des erreurs.');
+            }
         }
 
-        return $this->render('events/new.html.twig', [
+        return $this->render('events/addevents.html.twig', [
             'formE' => $form->createView(),
         ]);
     }
+
+
 
     #[Route('/send-reminder', name: 'app_send_reminder')]
     public function sendReminder(EmailVerifier $emailService): Response
