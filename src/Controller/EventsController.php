@@ -31,7 +31,12 @@ use App\Entity\Local;
 class EventsController extends AbstractController
 {
 
+    private $security;
 
+    public function __construct(Security $security)
+    {
+        $this->security = $security;
+    }
     /*#[Route('/home', name: 'app_home')]
     public function home(EventsRepository $er): Response
     {  $events = $er->findAll();
@@ -74,7 +79,11 @@ class EventsController extends AbstractController
     #[Route('/liste-des-events', name: 'app_user_event_list')]
     public function listUserEvents(EventsRepository $er): Response
     {
-        $events = $er->findAll();
+        // Récupérer l'utilisateur connecté
+        $user = $this->security->getUser();
+
+        // Récupérer les événements auxquels cet utilisateur est inscrit
+        $events = $user->getEvent();  // Ici, getEvents() récupère les événements associés à l'utilisateur
 
         return $this->render('events/user_listEvents.html.twig', [
             'events' => $events,

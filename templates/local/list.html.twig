@@ -1,37 +1,266 @@
 {% extends 'base.html.twig' %}
 
-{% block title %}Liste des locaux{% endblock %}
+{% block title %}Home{% endblock %}
 
 {% block body %}
-    <h1>Liste des locaux</h1>
 
-    <table class="table">
-        <thead>
-        <tr>
-            <th>ID</th>
-            <th>Nom</th>
-            <th>Adresse</th>
-            <th>Capacité</th>
-            <th>Actions</th>
-        </tr>
-        </thead>
-        <tbody>
-        {% for local in locals %}
-            <tr>
-                <td>{{ local.id }}</td>
-                <td>{{ local.name }}</td>
-                <td>{{ local.adr }}</td>
-                <td>{{ local.capacite }}</td>
-                <td>
-                    <a href="#" class="btn btn-primary btn-sm">Modifier</a>
-                    <a href="#" class="btn btn-danger btn-sm">Supprimer</a>
-                </td>
-            </tr>
-        {% else %}
-            <tr>
-                <td colspan="5">Aucun local trouvé.</td>
-            </tr>
-        {% endfor %}
-        </tbody>
-    </table>
+    <head>
+
+        <meta charset="utf-8">
+        <meta name="viewport" content="width=device-width, initial-scale=1, shrink-to-fit=no">
+        <meta name="description" content="">
+        <meta name="author" content="Tooplate">
+        <link href="https://fonts.googleapis.com/css?family=Poppins:100,100i,200,200i,300,300i,400,400i,500,500i,600,600i,700,700i,800,800i,900,900i&display=swap" rel="stylesheet">
+
+        <title>My Locals</title>
+
+
+        <!-- Additional CSS Files -->
+        <link rel="stylesheet" type="text/css" href="{{ asset('assets/css/bootstrap.min.css') }}">
+
+        <link rel="stylesheet" type="text/css" href="{{ asset('assets/css/font-awesome.css') }}">
+
+        <link rel="stylesheet" type="text/css" href="{{ asset('assets/css/owl-carousel.css') }}">
+
+        <link rel="stylesheet" href="{{ asset('assets/css/tooplate-artxibition.css') }}">
+    </head>
+
+    <body>
+
+    <!-- ***** Preloader Start ***** -->
+    <div id="js-preloader" class="js-preloader">
+        <div class="preloader-inner">
+            <span class="dot"></span>
+            <div class="dots">
+                <span></span>
+                <span></span>
+                <span></span>
+            </div>
+        </div>
+    </div>
+    <!-- ***** Preloader End ***** -->
+
+    <!-- ***** Pre HEader ***** -->
+    <div class="pre-header">
+        <div class="container">
+
+        </div>
+    </div>
+
+    <!-- ***** Header Area Start ***** -->
+    <header class="header-area header-sticky">
+        <div class="container">
+            <div class="row">
+                <div class="col-12">
+
+                </div>
+            </div>
+        </div>
+    </header>
+    <!-- ***** Header Area End ***** -->
+
+    <!-- ***** About Us Page ***** -->
+    <div class="page-heading-rent-venue">
+        <div class="container">
+            <div class="row">
+                <div class="col-lg-12">
+                    <h2>Our Locals</h2>
+                    <span>Your ideal shows & events destination .</span>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <div class="shows-events-tabs">
+        <div class="container">
+
+            <div class="row">
+
+                <div class="col-lg-12">
+                    <div class="section-heading">
+                        <h2>List Local</h2>
+                    </div>
+                </div>
+                <div class="col-lg-12 mb-4">
+                    <ul>
+                        {% for local in locals %}
+                            <li class="list-group-item border-bottom">
+                                <div class="row">
+                                    <div class="col-lg-1">
+                                        <div class="title">
+                                            <span>{{ local.id }}</span>
+                                        </div>
+                                    </div>
+                                    <div class="col-lg-3">
+                                        <div class="title">
+                                            <span><i class="fa fa-building"></i>{{ local.name }}</span>
+                                        </div>
+                                    </div>
+                                    <div class="col-lg-2">
+                                        <div class="time"><span><i class="fa fa-users"></i>{{ local.capacite }}</span></div>
+                                    </div>
+                                    <div class="col-lg-3">
+                                        <div class="place"><span><i class="fa fa-map-marker"></i>{{ local.adr }}</span></div>
+                                    </div>
+                                    <div class="col-lg-1">
+                                        <div class="title">
+                                             <span>
+                                            {% if local.available %}
+                                                <i class="fa fa-check-circle text-success"></i>
+                                            {% else %}
+                                                <i class="fa fa-times-circle text-danger"></i>
+                                            {% endif %}
+                                        </span>
+                                        </div>
+                                    </div>
+                                    <div class="col-lg-2">
+                                        <div class="main-dark-button">
+                                            <a href="{{ path('app_local_show', {'id': local.id}) }}">show</a>
+                                        </div>
+                                    </div>
+                                </div>
+                            </li>
+                        {% else %}
+                            <li>
+                                <div class="no-records">
+                                    <p>No locals found</p>
+                                </div>
+                            </li>
+                        {% endfor %}
+                    </ul>
+
+                </div>
+            </div>
+        </div>
+
+    </div>
+
+
+    <!-- *** Subscribe *** -->
+    <div class="subscribe">
+        <div class="container">
+            <div class="row">
+                <div class="col-lg-4">
+                    <h4>Subscribe Our Newsletter:</h4>
+                </div>
+                <div class="col-lg-8">
+                    <form id="subscribe" action="" method="get">
+                        <div class="row">
+                            <div class="col-lg-9">
+                                <fieldset>
+                                    <input name="email" type="text" id="email" pattern="[^ @]*@[^ @]*" placeholder="Your Email Address" required="">
+                                </fieldset>
+                            </div>
+                            <div class="col-lg-3">
+                                <fieldset>
+                                    <button type="submit" id="form-submit" class="main-dark-button">Submit</button>
+                                </fieldset>
+                            </div>
+                        </div>
+                    </form>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <!-- *** Footer *** -->
+    <footer>
+        <div class="container">
+            <div class="row">
+                <div class="col-lg-4">
+                    <div class="address">
+                        <h4>Private University Tekup </h4>
+                        <span>Rue Newton<br>Ariana<br>Tunisie</span>
+                    </div>
+                </div>
+                <div class="col-lg-4">
+                    <div class="links">
+                        <h4>Useful Links</h4>
+                        <ul>
+                            <li><a href="#">Info</a></li>
+                            <li><a href="#">Venues</a></li>
+                            <li><a href="#">Guides</a></li>
+                            <li><a href="#">Videos</a></li>
+                            <li><a href="#">Outreach</a></li>
+                        </ul>
+                    </div>
+                </div>
+                <div class="col-lg-4">
+                    <div class="hours">
+                        <h4>Open Hours</h4>
+                        <ul>
+                            <li>Mon to Fri: 10:00 AM to 8:00 PM</li>
+                            <li>Sat - Sun: 11:00 AM to 4:00 PM</li>
+                            <li>Holidays: Closed</li>
+                        </ul>
+                    </div>
+                </div>
+                <div class="col-lg-12">
+                    <div class="under-footer">
+                        <div class="row">
+                            <div class="col-lg-6">
+                                <p>Ariana, Tunis</p>
+                            </div>
+                            <div class="col-lg-6">
+                                <p class="copyright">Copyright 2025 Tekup
+
+                            </div>
+                        </div>
+                    </div>
+                </div>
+                <div class="col-lg-12">
+                    <div class="sub-footer">
+                        <div class="row">
+                            <div class="col-lg-3">
+                                <div class="logo"><span><em>Tekup</em></span></div>
+                            </div>
+                            <div class="col-lg-6">
+                                <div class="menu">
+                                    <ul>
+                                        <li><a href="" class="active">UpComing Events</a></li>
+                                        <li><a href="">Locals</a></li>
+                                        <li><a href="">Contact Us</a></li>
+                                    </ul>
+                                </div>
+                            </div>
+                            <div class="col-lg-3">
+                                <div class="social-links">
+                                    <ul>
+                                        <li><a href="#"><i class="fa fa-twitter"></i></a></li>
+                                        <li><a href="#"><i class="fa fa-facebook"></i></a></li>
+                                        <li><a href="#"><i class="fa fa-behance"></i></a></li>
+                                        <li><a href="#"><i class="fa fa-instagram"></i></a></li>
+                                    </ul>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </footer>
+
+
+
+    <!-- jQuery -->
+    <script src="{{ asset('assets/js/jquery-2.1.0.min.js') }}"></script>
+
+    <!-- Bootstrap -->
+    <script src="{{ asset('assets/js/popper.js') }}"></script>
+    <script src="{{ asset('assets/js/bootstrap.min.js') }}"></script>
+
+    <!-- Plugins -->
+    <script src="{{ asset('assets/js/scrollreveal.min.js') }}"></script>
+    <script src="{{ asset('assets/js/waypoints.min.js') }}"></script>
+    <script src="{{ asset('assets/js/jquery.counterup.min.js') }}"></script>
+    <script src="{{ asset('assets/js/imgfix.min.js') }}"></script>
+    <script src="{{ asset('assets/js/mixitup.js') }}"></script>
+    <script src="{{ asset('assets/js/accordions.js') }}"></script>
+    <script src="{{ asset('assets/js/owl-carousel.js') }}"></script>
+
+    <!-- Global Init -->
+    <script src="{{ asset('assets/js/custom.js') }}"></script>
+
+    </body>
+
 {% endblock %}

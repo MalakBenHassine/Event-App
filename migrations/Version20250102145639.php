@@ -7,10 +7,7 @@ namespace DoctrineMigrations;
 use Doctrine\DBAL\Schema\Schema;
 use Doctrine\Migrations\AbstractMigration;
 
-/**
- * Auto-generated Migration: Please modify to your needs!
- */
-final class Version20250102145639 extends AbstractMigration
+final class Version20250103104140 extends AbstractMigration
 {
     public function getDescription(): string
     {
@@ -35,12 +32,10 @@ final class Version20250102145639 extends AbstractMigration
         $this->addSql('ALTER TABLE tickets ADD CONSTRAINT FK_54469DF4B83297E7 FOREIGN KEY (reservation_id) REFERENCES reservation (id)');
         $this->addSql('ALTER TABLE user_events ADD CONSTRAINT FK_36D54C77A76ED395 FOREIGN KEY (user_id) REFERENCES user (id) ON DELETE CASCADE');
         $this->addSql('ALTER TABLE user_events ADD CONSTRAINT FK_36D54C779D6A1065 FOREIGN KEY (events_id) REFERENCES events (id) ON DELETE CASCADE');
-        $this->addSql('ALTER TABLE password_reset_token ADD CONSTRAINT FK_6B7BA4B6A76ED395 FOREIGN KEY (user_id) REFERENCES user (id)');
     }
 
     public function down(Schema $schema): void
     {
-        // this down() migration is auto-generated, please modify it to your needs
         $this->addSql('ALTER TABLE password_reset_token DROP FOREIGN KEY FK_6B7BA4B6A76ED395');
         $this->addSql('ALTER TABLE events DROP FOREIGN KEY FK_5387574A5D5A2101');
         $this->addSql('ALTER TABLE local DROP FOREIGN KEY FK_8BD688E8A76ED395');
