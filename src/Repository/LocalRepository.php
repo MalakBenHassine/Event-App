@@ -49,4 +49,12 @@ class LocalRepository extends ServiceEntityRepository
             ->getQuery()
             ->getResult();
     }
+    public function findByUser($user): array
+    {
+        return $this->createQueryBuilder('l')
+            ->andWhere('l.user = :user')
+            ->setParameter('user', $user)
+            ->getQuery()
+            ->getResult();
+    }
 }

@@ -16,11 +16,27 @@ use Symfony\Component\Security\Http\Attribute\IsGranted;
 #[Route('/local')]
 final class LocalController extends AbstractController
 {
-    #[Route(name: 'app_local_index', methods: ['GET'])]
-    public function index(LocalRepository $localRepository): Response
+    #[Route('/myLocals', name: 'app_my_locals',  methods: ['GET'])]
+    public function myLocals(LocalRepository $localRepository, Security $security): Response
     {
-        return $this->render('local/index.html.twig', [
+        $user = $security->getUser();
+        return $this->render('local/myLocals.html.twig', [
+            'locals' => $localRepository->findByUser($user),
+        ]);
+    }
+    #[Route('/locals', name: 'app_locals',  methods: ['GET'])]
+    public function locals(LocalRepository $localRepository): Response
+    {
+        return $this->render('local/list.html.twig', [
             'locals' => $localRepository->findAll(),
+        ]);
+    }
+    #[Route(name: 'app_local_index', methods: ['GET'])]
+    public function index(LocalRepository $localRepository, Security $security): Response
+    {
+        $user = $security->getUser();
+        return $this->render('local/index.html.twig', [
+            'locals' => $localRepository->findByUser($user),
         ]);
     }
     #[IsGranted('ROLE_LOUEUR')]
