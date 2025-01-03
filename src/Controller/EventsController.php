@@ -9,6 +9,8 @@ use App\Repository\UserRepository;
 use App\Security\EmailVerifier;
 use DateTime;
 use Doctrine\DBAL\Types\Types;
+use App\Form\LocalType;
+use Symfony\Component\Security\Core\Security;
 
 use App\Entity\Events;
 use App\Form\EventType;
@@ -102,15 +104,19 @@ class EventsController extends AbstractController
     #[Route('/events/new', name: 'app_new')]
     public function new(Request $request, EntityManagerInterface $entityManager, LocalRepository $localRepository): Response
     {
+        // Créer une nouvelle instance d'événement
         $event = new Events();
+
+        // Créer le formulaire pour l'entité Event
         $form = $this->createForm(EventType::class, $event);
         $form->handleRequest($request);
 
-        // Récupérer les locaux
+        // Récupérer tous les locaux disponibles
         $locals = $localRepository->findAll();
 
+        // Traiter la soumission du formulaire
         if ($form->isSubmitted() && $form->isValid()) {
-            // Validation supplémentaire si nécessaire
+            // Validation supplémentaire des champs si nécessaire
             if (!$event->getNom()) {
                 $form->get('nom')->addError(new FormError('Le nom est requis.'));
             }
@@ -121,31 +127,35 @@ class EventsController extends AbstractController
                 $form->get('local')->addError(new FormError('Le local est requis.'));
             }
 
-            if (!$form->isValid()) {
-                return $this->render('events/addevents.html.twig', [
-                    'form' => $form->createView(),
-                    'locals' => $locals,
-                ]);
+            // Si le formulaire est valide, on sauvegarde l'événement
+            if ($form->isValid()) {
+                // Si un local est sélectionné, vérifier s'il est déjà enregistré
+                $local = $event->getLocal();
+
+                // Si le local est une nouvelle instance (non enregistré), on le persiste dans la base de données
+                if ($local && !$local->getId()) {
+                    $entityManager->persist($local);
+                }
+
+                // Marquer le local comme indisponible si un local est sélectionné
+                if ($local) {
+                    $local->setIsAvailable(false);
+                    $entityManager->persist($local);
+                }
+
+                // Sauvegarder l'événement en base de données
+                $entityManager->persist($event);
+                $entityManager->flush();
+
+                // Rediriger vers la page des événements après la création de l'événement
+                return $this->redirectToRoute('app_event');
             }
-
-            // Marquer le local comme indisponible
-            $local = $event->getLocal();
-            if ($local) {
-                $local->setIsAvailable(false);
-                $entityManager->persist($local);
-            }
-
-            // Sauvegarder l'événement
-            $entityManager->persist($event);
-            $entityManager->flush();
-
-            // Rediriger après la création ou afficher un message de succès
-            return $this->redirectToRoute('app_event');
         }
 
+        // Rendre le formulaire dans la vue avec la liste des locaux disponibles
         return $this->render('events/addevents.html.twig', [
             'form' => $form->createView(),
-            'locals' => $locals,
+            'locals' => $locals,  // Affichage des locaux
         ]);
     }
 
@@ -211,9 +221,41 @@ class EventsController extends AbstractController
 
 
     #[Route('/local/{id}', name: 'app_local_detail')]
-    public function localDetail(int $id, EntityManagerInterface $em): Response
+    public function localDetail(string $id, EntityManagerInterface $em, Request $request, Security $security): Response
     {
-        $local = $em->getRepository(Local::class)->find($id);
+        $user = $security->getUser();
+        // Vérification si l'ID est 'new'
+        if ($id === 'new') {
+            // Créer un nouveau local (entité)
+            $local = new Local();
+
+            // Associer le local à l'utilisateur connecté
+            $user = $security->getUser();  // Récupère l'utilisateur connecté
+            $local->setUser($user); // Lier l'utilisateur au local
+
+            // Créer le formulaire lié à cet objet
+            $form = $this->createForm(LocalType::class, $local);
+
+            // Traiter la soumission du formulaire
+            $form->handleRequest($request);
+
+            if ($form->isSubmitted() && $form->isValid()) {
+                // Sauvegarder le nouveau local en base de données
+                $em->persist($local);
+                $em->flush();
+
+                // Rediriger vers la page de détail du nouveau local (ou vers une autre page)
+                return $this->redirectToRoute('app_local_detail', ['id' => $local->getId()]);
+            }
+
+            // Afficher le formulaire de création dans la vue
+            return $this->render('local/new.html.twig', [
+                'form' => $form->createView(),
+            ]);
+        }
+
+        // Traiter le cas où l'ID est un entier et afficher les détails du local existant
+        $local = $em->getRepository(Local::class)->find((int) $id);
 
         if (!$local) {
             throw $this->createNotFoundException('Le local n\'existe pas');
@@ -223,6 +265,7 @@ class EventsController extends AbstractController
             'local' => $local,
         ]);
     }
+
 
 
 
