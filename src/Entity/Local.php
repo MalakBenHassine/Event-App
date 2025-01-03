@@ -61,6 +61,10 @@ class Local
         return $this;
     }
 
+    public function __toString(): string
+    {
+        return $this->getName(); // Ou un autre champ de votre choix
+    }
 
     /**
      * @var Collection<int, Events>

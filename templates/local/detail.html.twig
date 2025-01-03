@@ -1,0 +1,12 @@
+{% extends 'base.html.twig' %}
+
+{% block title %}Détails du Local{% endblock %}
+
+{% block body %}
+    <h1>{{ local.name }}</h1>
+    <p><strong>Adresse :</strong> {{ local.adr }}</p>
+    <p><strong>Capacité :</strong> {{ local.capacite }} personnes</p>
+    <p><strong>Prix :</strong> {{ local.price ? local.price ~ ' €' : 'Non spécifié' }}</p>
+    <p><strong>Description :</strong> {{ local.description|default('Aucune description') }}</p>
+
+{% endblock %}

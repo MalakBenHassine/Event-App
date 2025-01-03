@@ -24,6 +24,7 @@ use Symfony\Component\Routing\Attribute\Route;
 use Symfony\Component\Form\Extension\Core\Type\TextType;
 use Symfony\Component\Form\Extension\Core\Type\TextareaType;
 use Symfony\Component\Form\Extension\Core\Type\SubmitType;
+use App\Entity\Local;
 
 class EventsController extends AbstractController
 {
@@ -99,33 +100,56 @@ class EventsController extends AbstractController
     }
 
     #[Route('/events/new', name: 'app_new')]
-    public function new(Request $request, EntityManagerInterface $em): Response
+    public function new(Request $request, EntityManagerInterface $entityManager, LocalRepository $localRepository): Response
     {
         $event = new Events();
         $form = $this->createForm(EventType::class, $event);
         $form->handleRequest($request);
 
-        // Vérifier si le formulaire est soumis et valide
-        if ($form->isSubmitted()) {
-            if ($form->isValid()) {
-                $em->persist($event);
-                $em->flush();
-                $this->addFlash('success', 'Événement créé avec succès !');
+        // Récupérer les locaux
+        $locals = $localRepository->findAll();
 
-                return $this->redirectToRoute('app_event');
-            } else {
-                // Afficher les erreurs
-                foreach ($form->getErrors(true) as $error) {
-                    dump($error->getMessage()); // Affiche chaque erreur dans le log
-                }
-                $this->addFlash('error', 'Le formulaire contient des erreurs.');
+        if ($form->isSubmitted() && $form->isValid()) {
+            // Validation supplémentaire si nécessaire
+            if (!$event->getNom()) {
+                $form->get('nom')->addError(new FormError('Le nom est requis.'));
             }
+            if (!$event->getDate()) {
+                $form->get('date')->addError(new FormError('La date est requise.'));
+            }
+            if (!$event->getLocal()) {
+                $form->get('local')->addError(new FormError('Le local est requis.'));
+            }
+
+            if (!$form->isValid()) {
+                return $this->render('events/addevents.html.twig', [
+                    'form' => $form->createView(),
+                    'locals' => $locals,
+                ]);
+            }
+
+            // Marquer le local comme indisponible
+            $local = $event->getLocal();
+            if ($local) {
+                $local->setIsAvailable(false);
+                $entityManager->persist($local);
+            }
+
+            // Sauvegarder l'événement
+            $entityManager->persist($event);
+            $entityManager->flush();
+
+            // Rediriger après la création ou afficher un message de succès
+            return $this->redirectToRoute('app_event');
         }
 
         return $this->render('events/addevents.html.twig', [
-            'formE' => $form->createView(),
+            'form' => $form->createView(),
+            'locals' => $locals,
         ]);
     }
+
+
 
 
 
@@ -170,12 +194,36 @@ class EventsController extends AbstractController
     public function deleteEvent(Request $request, Events $event, EntityManagerInterface $em): Response
     {
         if ($this->isCsrfTokenValid('delete' . $event->getId(), $request->request->get('_token'))) {
+            // Remettre le local en disponibilité
+            $local = $event->getLocal();
+            if ($local) {
+                $local->setIsAvailable(true);
+                $em->persist($local);
+            }
+
             $em->remove($event);
             $em->flush();
         }
 
         return $this->redirectToRoute('app_event');
     }
+
+
+
+    #[Route('/local/{id}', name: 'app_local_detail')]
+    public function localDetail(int $id, EntityManagerInterface $em): Response
+    {
+        $local = $em->getRepository(Local::class)->find($id);
+
+        if (!$local) {
+            throw $this->createNotFoundException('Le local n\'existe pas');
+        }
+
+        return $this->render('local/detail.html.twig', [
+            'local' => $local,
+        ]);
+    }
+
 
 
 }
