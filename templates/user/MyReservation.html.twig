@@ -12,7 +12,7 @@
         <meta name="author" content="Tooplate">
         <link href="https://fonts.googleapis.com/css?family=Poppins:100,100i,200,200i,300,300i,400,400i,500,500i,600,600i,700,700i,800,800i,900,900i&display=swap" rel="stylesheet">
 
-        <title>My Venues</title>
+        <title>My Reservations</title>
 
 
         <!-- Additional CSS Files -->
@@ -40,32 +40,31 @@
     </div>
     <!-- ***** Preloader End ***** -->
 
+    <!-- ***** Pre HEader ***** -->
+    <div class="pre-header">
+        <div class="container">
 
-    <!-- ***** Header Area End ***** -->
-    {% if is_granted('Role_Locator') %}
-    <div class="container my-4">
-        <div class="row justify-content-between align-items-center">
-            <div class="col-md-6">
-                <h4>Manage Your venues</h4>
-            </div>
-            <div class="col-md-6 text-end">
-                <a href="{{ path('app_local_new') }}" class="btn btn-success me-2">
-                    <i class="fa fa-plus"></i> Create New
-                </a>
+        </div>
+    </div>
 
+    <!-- ***** Header Area Start ***** -->
+    <header class="header-area header-sticky">
+        <div class="container">
+            <div class="row">
+                <div class="col-12">
+
+                </div>
             </div>
         </div>
-        <hr>
-    </div>
-    {% endif %}
-
+    </header>
+    <!-- ***** Header Area End ***** -->
 
     <!-- ***** About Us Page ***** -->
     <div class="page-heading-rent-venue">
         <div class="container">
             <div class="row">
                 <div class="col-lg-12">
-                    <h2>Our Venues</h2>
+                    <h2>My Reservations </h2>
                     <span>Your ideal shows & events destination .</span>
                 </div>
             </div>
@@ -79,44 +78,74 @@
 
                 <div class="col-lg-12">
                     <div class="section-heading">
-                        <h2>List Venue</h2>
                     </div>
                 </div>
                 <div class="col-lg-12 mb-4">
                     <ul>
-                        {% for local in locals %}
+                        {% for reservation in reservations %}
                             <li class="list-group-item border-bottom">
                                 <div class="row">
-                                    <div class="col-lg-1">
-                                        <div class="title">
-                                            <span>{{ local.id }}</span>
-                                        </div>
-                                    </div>
-                                    <div class="col-lg-3">
-                                        <div class="title">
-                                            <span><i class="fa fa-building"></i>{{ local.name }}</span>
-                                        </div>
-                                    </div>
+                                    <!-- Nom de l'événement -->
                                     <div class="col-lg-2">
-                                        <div class="time"><span><i class="fa fa-users"></i>{{ local.capacite }}</span></div>
-                                    </div>
-                                    <div class="col-lg-3">
-                                        <div class="place"><span><i class="fa fa-map-marker"></i>{{ local.adr }}</span></div>
-                                    </div>
-                                    <div class="col-lg-1">
                                         <div class="title">
-                                             <span>
-                                            {% if local.available %}
-                                                <i class="fa fa-check-circle text-success"></i>
+                                            <span><i class="fa fa-calendar"></i> {{ reservation.event.getNom() }}</span>
+                                        </div>
+                                    </div>
+                                    <!-- Catégories -->
+                                    <div class="col-lg-2">
+                                        <div class="time">
+                    <span>
+                        <i class="fa fa-tags"></i>
+                        {% for category in reservation.event.getCategory() %}
+                            {{ category }}{% if not loop.last %}, {% endif %}
+                        {% endfor %}
+                    </span>
+                                        </div>
+                                    </div>
+                                    <!-- Adresse -->
+                                    <div class="col-lg-2">
+                                        <div class="place">
+                                            <span><i class="fa fa-map-marker"></i> {{ reservation.event.local.getAdr() }}</span>
+                                        </div>
+                                    </div>
+                                    <!-- Prix -->
+                                    <div class="col-lg-2">
+                                        <div class="price">
+                                            <span><i class="fa fa-money"></i> {{ reservation.event.getPrix() }} TND</span>
+                                        </div>
+                                    </div>
+                                    <!-- Date -->
+                                    <div class="col-lg-2">
+                                        <div class="date">
+                                            <span><i class="fa fa-clock-o"></i> {{ reservation.event.getDate|date('d/m/Y') }}</span>
+                                        </div>
+                                    </div>
+                                    <!-- Organisateur -->
+                                    <div class="col-lg-2">
+                                        <div class="organizer">
+
+                                            <span><i class="fa fa-user"></i> Organized By {{ reservation.event.getOrganizer().getName() }}</span>
+                                        </div>
+                                    </div>
+                                    <!-- Actions -->
+                                    <div class="col-lg-12 mt-2">
+                                        <div class="row">
+                                            <div class="col-auto">
+                                               <button style="background-color: #062c33;color: white" class="btn"> <a href="{{ path('event_details',{'id':reservation.event.id}) }}" style="color: white"> Event Details</a></button>
+
+                                            </div>
+                                            <div class="col-auto">
+                                                {{ include('reservation/delete_reservation.html.twig') }}
+                                            </div>
+                                            {% if reservation.status != 'Confirmed' %}
+                                                <div class="col-auto">
+                                                    {{ include('reservation/confirm_reservation.html.twig') }}
+                                                </div>
                                             {% else %}
-                                                <i class="fa fa-times-circle text-danger"></i>
+                                                <div class="col-auto">
+                                                    <button disabled="disabled" class="btn" style="background-color: #062c33; color: white">Payed</button>
+                                                </div>
                                             {% endif %}
-                                        </span>
-                                        </div>
-                                    </div>
-                                    <div class="col-lg-2">
-                                        <div class="main-dark-button">
-                                            <a href="{{ path('app_local_show', {'id': local.id}) }}">show</a>
                                         </div>
                                     </div>
                                 </div>
@@ -124,10 +153,11 @@
                         {% else %}
                             <li>
                                 <div class="no-records">
-                                    <p>No locals found</p>
+                                    <p>No Reservations found</p>
                                 </div>
                             </li>
                         {% endfor %}
+
                     </ul>
 
                 </div>
@@ -165,6 +195,7 @@
     </div>
 
     <!-- *** Footer *** -->
+
 
 
     <!-- jQuery -->

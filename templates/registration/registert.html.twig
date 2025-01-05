@@ -3,17 +3,17 @@
 {% block title %}Sign up{% endblock %}
 
 {% block body %}
-    <div class="container-fluid min-vh-100 d-flex justify-content-center align-items-center bg-white">
-        <div class="row w-100 shadow-lg" style="max-width: 900px; border-radius: 10px; overflow: hidden; border: 1px solid #17B8A6;">
+    <div class="container-fluid min-vh-100 d-flex justify-content-center align-items-center bg-white" style="background-image:url('{{asset('assets/images/back.jpg')}}')">
+        <div class="row w-100 shadow-lg" style="max-width: 900px; border-radius: 10px; overflow: hidden; border: 1px solid #062c33;background-color: white">
             <!-- Partie gauche : Image -->
-            <div class="col-lg-6 d-flex justify-content-center align-items-center p-4" style="background-color: #17B8A6;">
-                <img src="{{ asset('assets/img/signup-image.svg') }}" alt="Sign up" class="img-fluid" style="max-height: 300px;">
+            <div class="col-lg-6 d-flex justify-content-center align-items-center p-4" style="background-color: #062c33">
+                <img src="{{ asset('assets/images/logo myevent.png') }}" alt="Log in" class="img-fluid" style="max-height: 300px;">
             </div>
 
             <!-- Partie droite : Formulaire -->
             <div class="col-lg-6 p-4">
                 <div class="text-center mb-4">
-                    <h3 class="fw-bold" style="color: #17B8A6;">Sign up</h3>
+                    <h3 class="fw-bold" style="color: #062c33;">Sign up</h3>
                 </div>
                 <div class="card border-0">
                     <div class="card-body">
@@ -48,6 +48,12 @@
                         </div>
 
                         <!-- Agree Terms -->
+
+                        <div class="form-floating mb-3">
+                            {{ form_widget(registrationForm.roles, {'attr': { ' style': 'border: 1px solid #17B8A6;color:white;background-color: #062c33'}}) }}
+
+                            {{ form_errors(registrationForm.roles) }}
+                        </div>
                         <div class="form-check mb-3">
                             {{ form_widget(registrationForm.agreeTerms, {'attr': {'class': 'form-check-input'}}) }}
                             {{ form_label(registrationForm.agreeTerms, 'Agree to terms and conditions', {'label_attr': {'class': 'form-check-label'}}) }}
@@ -56,10 +62,10 @@
 
                         <!-- Submit Button -->
                         <div class="d-grid mb-3">
-                            <button class="btn btn-lg" type="submit" style="background-color: #17B8A6; color: #fff; border: none;">Sign up</button>
+                            <button class="btn btn-lg" type="submit" style="background-color: #062c33; color: #fff; border: none;">Sign up</button>
                         </div>
-
                         {{ form_end(registrationForm) }}
+
                     </div>
                 </div>
 
@@ -71,4 +77,6 @@
             </div>
         </div>
     </div>
+    <script src="{{ asset('assets/css/tooplate-artxibition.css') }}"></script>
+
 {% endblock %}

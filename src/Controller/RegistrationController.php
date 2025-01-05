@@ -49,13 +49,17 @@ class RegistrationController extends AbstractController
                     ->subject('Please Confirm your Email')
                     ->htmlTemplate('registration/confirmation_email.html.twig')
             );
+            $this->addFlash('success', 'A confirmation email has been sent to your email address.');
 
             // do anything else you need here, like send an email
 
-            //return $security->login($user, AppCustomAuthenticator::class, 'main');
+            return $this->redirectToRoute('app_login');
         }
 
-        return $this->redirectToRoute('app_login');
+        return $this->render('registration/registert.html.twig', [
+            'registrationForm' => $form,
+        ]);
+
     }
 
     #[Route('/verify/email', name: 'app_verify_email')]

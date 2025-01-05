@@ -205,13 +205,11 @@ body {
 .section-heading {
   text-align: center;
   margin-top: 40px;
-  margin-bottom: 40px;
 }
 
 .section-heading h2 {
   font-size: 30px;
   font-weight: 800;
-  color: #2a2a2a;
   text-transform: capitalize;
   letter-spacing: 0.5px;
   margin-top: 0px;
@@ -655,6 +653,7 @@ banner
   background-repeat: no-repeat;
   background-size: cover;
   text-align: center;
+
   padding: 270px 0px 210px 0px;
   position: relative;
 }
@@ -1741,6 +1740,13 @@ Shows Events Page
   border-bottom: 1px dotted #d7dadc;
   padding-bottom: 30px;
 }
+.custom-form-style {
+  background-color: #f9f9f9;
+  padding: 10px;
+  border-radius: 10px;
+}
+
+
 .category-select {
   font-family: Arial, sans-serif;
   padding: 10px;

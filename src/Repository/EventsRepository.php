@@ -34,6 +34,15 @@ class EventsRepository extends ServiceEntityRepository
             ->getQuery()
             ->getResult();
     }
+
+    public function findByUser(int $userId): array
+    {
+        return $this->createQueryBuilder('e')
+            ->where('e.user_id = :userId')
+            ->setParameter('$userId', $userId)
+            ->getQuery()
+            ->getResult();
+    }
     public function findByExampleField($value): array
        {
             return $this->createQueryBuilder('e')
@@ -52,6 +61,14 @@ class EventsRepository extends ServiceEntityRepository
                ->setParameter('val', $value)
                ->getQuery()
                ->getOneOrNullResult()
+            ;}
+    public function findById($value): ?Events
+    {
+        return $this->createQueryBuilder('e')
+            ->andWhere('e.id = :val')
+            ->setParameter('val', $value)
+            ->getQuery()
+            ->getOneOrNullResult()
             ;}
     public function findByFilters(?string $name, ?string $category, ?string $local, ?\DateTime $dateFrom): array
     {

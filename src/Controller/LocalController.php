@@ -11,6 +11,7 @@ use Symfony\Component\HttpFoundation\Request;
 use Symfony\Bundle\SecurityBundle\Security;
 use Symfony\Component\HttpFoundation\Response;
 use Symfony\Component\Routing\Attribute\Route;
+use Symfony\Component\Security\Core\User\UserInterface;
 use Symfony\Component\Security\Http\Attribute\IsGranted;
 
 #[Route('/local')]
@@ -20,8 +21,12 @@ final class LocalController extends AbstractController
     public function myLocals(LocalRepository $localRepository, Security $security): Response
     {
         $user = $security->getUser();
+        $locals = $localRepository->findByUser($user);
+        if (empty($locals)) {
+            throw $this->createNotFoundException("No locals found for the current user.");
+        }
         return $this->render('local/myLocals.html.twig', [
-            'locals' => $localRepository->findByUser($user),
+            'locals' => $locals,
         ]);
     }
     #[Route(name: 'app_local_index', methods: ['GET'])]
@@ -31,7 +36,7 @@ final class LocalController extends AbstractController
             'locals' => $localRepository->findAll(),
         ]);
     }
-    #[IsGranted('ROLE_LOUEUR')]
+    #[IsGranted('ROLE_LOCATOR')]
 
     #[Route('/new', name: 'app_local_new', methods: ['GET', 'POST'])]
     public function new(Request $request, EntityManagerInterface $entityManager, Security $security): Response
@@ -39,12 +44,18 @@ final class LocalController extends AbstractController
         $user = $security->getUser();
 
         // Vérifie si l'utilisateur possède le rôle "ROLE_LOCATOR"
-        if (!$this->isGranted('ROLE_LOUEUR')) {
+        if (!$this->isGranted('ROLE_LOCATOR')) {
             throw $this->createAccessDeniedException('Vous n’avez pas les droits pour créer un Local.');
         }
 
         $local = new Local();
-        $local->setUser($user);
+        $user = $this->getUser();
+
+        if ($user instanceof UserInterface) {
+            $local->setUser($user);
+        } else {
+            return $this->redirectToRoute('app_login');
+        }
 
         $form = $this->createForm(LocalType::class, $local);
         $form->handleRequest($request);
@@ -57,8 +68,7 @@ final class LocalController extends AbstractController
         }
 
         return $this->render('local/new.html.twig', [
-            'local' => $local,
-            'form' => $form,
+            'form' => $form->createView(),
         ]);
     }
 
@@ -67,7 +77,7 @@ final class LocalController extends AbstractController
 
 
 
-    #[IsGranted('ROLE_LOUEUR')]
+    #[IsGranted('ROLE_LOCATOR')]
 
     #[Route('/{id}/edit', name: 'app_local_edit', methods: ['GET', 'POST'])]
     public function edit(Request $request, Local $local, EntityManagerInterface $entityManager): Response
@@ -78,7 +88,7 @@ final class LocalController extends AbstractController
         if ($form->isSubmitted() && $form->isValid()) {
             $entityManager->flush();
 
-            return $this->redirectToRoute('app_local_index', [], Response::HTTP_SEE_OTHER);
+            return $this->redirectToRoute('app_my_locals', [], Response::HTTP_SEE_OTHER);
         }
 
         return $this->render('local/edit.html.twig', [
@@ -86,7 +96,7 @@ final class LocalController extends AbstractController
             'form' => $form,
         ]);
     }
-    #[IsGranted('ROLE_LOUEUR')]
+    #[IsGranted('ROLE_LOCATOR')]
 
     #[Route('/{id}', name: 'app_local_delete', methods: ['POST'])]
     public function delete(Request $request, Local $local, EntityManagerInterface $entityManager): Response

@@ -34,7 +34,15 @@ class UserRepository extends ServiceEntityRepository
         $user = $this->findOneBy(['email' => $email]);
         return $user;
     }
-
+    public function findEventsByUser(User $user)
+    {
+        return $this->createQueryBuilder('p')
+            ->innerJoin('p.event', 'e')  // Joindre la table des événements
+            ->where('p.user = :user')    // Filtrer par utilisateur
+            ->setParameter('user', $user)
+            ->getQuery()
+            ->getResult();
+    }
     //    public function findOneBySomeField($value): ?User
     //    {
     //        return $this->createQueryBuilder('u')

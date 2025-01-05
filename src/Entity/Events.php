@@ -18,7 +18,10 @@ private ?string $nom = null;
 
 #[ORM\Column(type: Types::DATE_MUTABLE)]
 private ?\DateTimeInterface $date = null;
-
+    #[ORM\Column(type: Types::INTEGER)]
+ private ?float $prix;
+    #[ORM\Column(type: Types::INTEGER)]
+    private ?int $total_participants;
 #[ORM\Column(length: 255)]
 private ?string $description = null;
 
@@ -39,6 +42,16 @@ public function getId(): ?int
 return $this->id;
 }
 
+    public function getTotalParticipants(): ?int
+    {
+        return $this->total_participants;
+    }
+
+    public function setTotalParticipants(?int $total_participants): void
+    {
+        $this->total_participants = $total_participants;
+    }
+
 public function getNom(): ?string
 {
 return $this->nom;
@@ -50,6 +63,17 @@ $this->nom = $nom;
 
 return $this;
 }
+
+    public function getPrix(): ?float
+    {
+        return $this->prix;
+    }
+
+    public function setPrix(?float $prix): void
+    {
+        $this->prix = $prix;
+    }
+
 
 public function getDate(): ?\DateTimeInterface
 {

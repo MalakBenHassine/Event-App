@@ -3,19 +3,23 @@
 namespace App\Controller;
 
 use App\Entity\PasswordResetToken;
+use App\Repository\EventRepository;
+use App\Repository\InscriptionRepository;
 use App\Repository\LocalRepository;
 use App\Repository\PasswordResetTokenRepository;
+use App\Repository\ReservationRepository;
 use App\Repository\UserRepository;
 use App\Security\EmailVerifier;
 use DateTime;
 use Doctrine\DBAL\Types\Types;
+use App\Form\LocalType;
+use Symfony\Component\Security\Core\Security;
 
 use App\Entity\Events;
 use App\Form\EventType;
 use App\Repository\EventsRepository;
 use Doctrine\ORM\EntityManagerInterface;
 use Exception;
-use phpDocumentor\Reflection\Types\Integer;
 use Symfony\Bundle\FrameworkBundle\Controller\AbstractController;
 use Symfony\Component\HttpFoundation\Request;
 use Symfony\Component\HttpFoundation\Response;
@@ -25,13 +29,19 @@ use Symfony\Component\Routing\Attribute\Route;
 use Symfony\Component\Form\Extension\Core\Type\TextType;
 use Symfony\Component\Form\Extension\Core\Type\TextareaType;
 use Symfony\Component\Form\Extension\Core\Type\SubmitType;
-use Symfony\Component\Security\Core\Security;
+use App\Entity\Local;
 
 class EventsController extends AbstractController
-{
-    public function __construct(Security $security)
+{   private UserRepository $userRepository;
+    private EventsRepository $eventRepository;
+    private ReservationRepository $inscriptionRepository;
+
+    public function __construct(Security $security,UserRepository $userRepository, EventsRepository $eventRepository, ReservationRepository $inscriptionRepository)
     {
         $this->security = $security;
+        $this->userRepository = $userRepository;
+        $this->eventRepository = $eventRepository;
+        $this->inscriptionRepository = $inscriptionRepository;
     }
 
 
@@ -42,6 +52,44 @@ class EventsController extends AbstractController
            'events' => $events,
         ]);
     }*/
+    #[Route('/admin', name: 'app_admin')]
+    public function dashboard(EntityManagerInterface $em,EventsRepository $eventRepository,ReservationRepository $inscriptionRepository,UserRepository $userRepository): Response
+    {
+        $query=$em->createQuery(
+            "SELECT u.name As username,Count(i.id) as InscriptionCount FROM App\Entity\User u
+            Left Join u.reservations i
+            Group by u.id
+            
+            "
+
+        );
+        $inscriptions=$query->getResult();
+
+        foreach ($inscriptions as &$data) {
+            $data['inscriptionsCount']=(int)$data['InscriptionCount'];
+        }
+
+        $Total_Events= $this->eventRepository->count();
+        $Total_Client= $this->userRepository->count();
+        $Total_Inscription= $this->inscriptionRepository->findAll();
+        return $this->render('dashboard/index.html.twig', [
+            'controller_name' => 'AdminController',
+            'Total_Client' => $Total_Client,
+            'Total_Events' => $Total_Events,
+            'data'=>$inscriptions,
+        ]);
+    }
+    #[Route('/event/{id}', name: 'event_details',requirements: ['id' => '\d+'])]
+    public function evnetDetails(int$id,EventsRepository $er,ReservationRepository $rr): Response
+    {  $event = $er->findById($id);
+        //$reservation= $rr->findByEvent($event);
+
+        return $this->render('events/AboutEvent.html.twig',[
+           'event' => $event,
+        ]);
+    }
+
+
 
 
     #[Route('/events', name: 'app_event')]
@@ -88,6 +136,32 @@ class EventsController extends AbstractController
             'events' => $events,
         ]);
     }
+    #[Route('/myEvents', name: 'app_my_events',  methods: ['GET'])]
+    public function myevent(EventsRepository $er, \Symfony\Bundle\SecurityBundle\Security $security): Response
+    {
+        $user = $security->getUser();
+        $events = $er->findByUser((int)$user->getId());
+        if (empty($events)) {
+            throw $this->createNotFoundException("No Events found for the current user.");
+        }
+        return $this->render('events/myEvent.html.twig', [
+            'events' => $events,
+        ]);
+    }
+    #[Route('/aboutEvent/{id}', name: 'about')]
+    public function aboutevent(EventsRepository $er): Response
+    {
+        // Récupérer l'utilisateur connecté
+        $user = $this->security->getUser();
+
+
+        // Récupérer les événements auxquels cet utilisateur est inscrit
+        $events = $er->findByOrganizer((int)$user->getId());  // Ici, getEvents() récupère les événements associés à l'utilisateur
+
+        return $this->render('events/AboutEvent.html.twig', [
+            'events' => $events,
+        ]);
+    }
 
 
     #[Route('/events/filter', name: 'app_event_filter', methods: ['GET'])]
@@ -110,21 +184,57 @@ class EventsController extends AbstractController
     }
 
     #[Route('/events/new', name: 'app_new')]
-    public function new(Request $request, EntityManagerInterface $em): Response
+    public function new(Request $request, EntityManagerInterface $em, LocalRepository $localRepository): Response
     {
+        // Créer une nouvelle instance d'événement
         $event = new Events();
+
+        // Créer le formulaire pour l'entité Event
         $form = $this->createForm(EventType::class, $event);
         $form->handleRequest($request);
 
-        // Vérifier si le formulaire est soumis et valide
-        if ($form->isSubmitted()) {
+        // Récupérer tous les locaux disponibles
+        $locals = $localRepository->findAll();
+
+        // Traiter la soumission du formulaire
+        if ($form->isSubmitted() && $form->isValid()) {
+            // Validation supplémentaire des champs si nécessaire
+            if (!$event->getNom()) {
+                $form->get('nom')->addError(new FormError('Le nom est requis.'));
+            }
+            if (!$event->getDate()) {
+                $form->get('date')->addError(new FormError('La date est requise.'));
+            }
+            if (!$event->getLocal()) {
+                $form->get('local')->addError(new FormError('Le local est requis.'));
+            }
+
+            // Si le formulaire est valide, on sauvegarde l'événement
             if ($form->isValid()) {
                 $event->setOrganizer($this->getUser());
                 $em->persist($event);
                 $em->flush();
-                $this->addFlash('success', 'Événement créé avec succès !');
+                $this->addFlash('success', 'Event Created Successfully!');
+                // Si un local est sélectionné, vérifier s'il est déjà enregistré
+                $local = $event->getLocal();
 
-                return $this->redirectToRoute('app_event');
+                // Si le local est une nouvelle instance (non enregistré), on le persiste dans la base de données
+                if ($local && !$local->getId()) {
+                    $em->persist($local);
+                }
+
+                // Marquer le local comme indisponible si un local est sélectionné
+                if ($local) {
+                    $local->setIsAvailable(false);
+                    $em->persist($local);
+                }
+
+                // Sauvegarder l'événement en base de données
+                $em->persist($event);
+                $em->flush();
+
+                // Rediriger vers la page des événements après la création de l'événement
+                return $this->redirectToRoute('app_user_event_list');
             } else {
                 // Afficher les erreurs
                 foreach ($form->getErrors(true) as $error) {
@@ -134,10 +244,14 @@ class EventsController extends AbstractController
             }
         }
 
+        // Rendre le formulaire dans la vue avec la liste des locaux disponibles
         return $this->render('events/addevents.html.twig', [
-            'formE' => $form->createView(),
+            'form' => $form->createView(),
+            'locals' => $locals,  // Affichage des locaux
         ]);
     }
+
+
 
 
 
@@ -155,7 +269,7 @@ class EventsController extends AbstractController
 
 
     #[Route('/event/edit/{id}', name: 'app_event_edit')]
-    public function edit(Events $event, Request $request, EntityManagerInterface $entityManager): Response
+    public function edit(Events $event, Request $request, EntityManagerInterface $em): Response
     {
         // Création du formulaire avec l'entité existante
         $form = $this->createForm(EventType::class, $event);
@@ -164,7 +278,7 @@ class EventsController extends AbstractController
         $form->handleRequest($request);
         if ($form->isSubmitted() && $form->isValid()) {
             // Enregistrement des modifications
-            $entityManager->flush();
+            $em->flush();
 
             // Redirection après succès
             return $this->redirectToRoute('app_event');
@@ -182,12 +296,69 @@ class EventsController extends AbstractController
     public function deleteEvent(Request $request, Events $event, EntityManagerInterface $em): Response
     {
         if ($this->isCsrfTokenValid('delete' . $event->getId(), $request->request->get('_token'))) {
+            // Remettre le local en disponibilité
+            $local = $event->getLocal();
+            if ($local) {
+                $local->setIsAvailable(true);
+                $em->persist($local);
+            }
+
             $em->remove($event);
             $em->flush();
         }
 
         return $this->redirectToRoute('app_event');
     }
+
+
+
+    #[Route('/local/{id}', name: 'app_local_detail',requirements: ['id' => '\d+'])]
+    public function localDetail(string $id, EntityManagerInterface $em, Request $request, Security $security): Response
+    {
+        $user = $security->getUser();
+        // Vérification si l'ID est 'new'
+        if ($id === 'new') {
+            // Créer un nouveau local (entité)
+            $local = new Local();
+
+            // Associer le local à l'utilisateur connecté
+            $user = $security->getUser();  // Récupère l'utilisateur connecté
+            $local->setUser($user); // Lier l'utilisateur au local
+
+            // Créer le formulaire lié à cet objet
+            $form = $this->createForm(LocalType::class, $local);
+
+            // Traiter la soumission du formulaire
+            $form->handleRequest($request);
+
+            if ($form->isSubmitted() && $form->isValid()) {
+                // Sauvegarder le nouveau local en base de données
+                $em->persist($local);
+                $em->flush();
+
+                // Rediriger vers la page de détail du nouveau local (ou vers une autre page)
+                return $this->redirectToRoute('app_local_detail', ['id' => $local->getId()]);
+            }
+
+            // Afficher le formulaire de création dans la vue
+            return $this->render('local/new.html.twig', [
+                'form' => $form->createView(),
+            ]);
+        }
+
+        // Traiter le cas où l'ID est un entier et afficher les détails du local existant
+        $local = $em->getRepository(Local::class)->find((int) $id);
+
+        if (!$local) {
+            throw $this->createNotFoundException('Le local n\'existe pas');
+        }
+
+        return $this->render('local/detail.html.twig', [
+            'local' => $local,
+        ]);
+    }
+
+
 
 
 }

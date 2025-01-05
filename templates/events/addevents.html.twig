@@ -38,7 +38,6 @@
     <div class="container">
         <div class="row">
             <div class="col-lg-6 col-sm-6">
-                <span>Hey! The Show Is Starting In 5 Days.</span>
             </div>
 
     </div>
@@ -58,81 +57,86 @@
     </div>
 </div>
 
+    <div class="container mt-4">
+        <div class="row text-center">
+            {% for local in locals %}
+                {% if local.isAvailable %}
+                    <div class="col-md-4">
+                        <a href="{{ path('app_local_detail', {'id': local.id}) }}" class="btn btn-outline-dark btn-block">
+                            {{ local.name }} <!-- Afficher le nom du local -->
+                        </a>
+                    </div>
+                {% endif %}
+            {% endfor %}
+        </div>
+    </div>
+
+
+
     <div class="events-form" style="padding-top: 50px;">
         <div class="container">
             <div class="row mb-3">
-                {{ form_start(formE, {'attr': {'class': 'custom-event-form'}}) }}
+                {{ form_start(form, {'attr': {'class': 'custom-event-form'}}) }}
 
                 <div class="col-md-6">
-                    {{ form_row(formE.nom) }}
-                    {% for error in formE.nom.vars.errors %}
+                    {{ form_row(form.nom) }}
+                    {% for error in form.nom.vars.errors %}
                         <div class="alert alert-danger">{{ error.message }}</div>
                     {% endfor %}
                 </div>
                 <div class="col-md-6">
-                    {{ form_row(formE.date) }}
-                    {% for error in formE.date.vars.errors %}
+                    {{ form_row(form.date) }}
+                    {% for error in form.date.vars.errors %}
                         <div class="alert alert-danger">{{ error.message }}</div>
                     {% endfor %}
                 </div>
             </div>
 
             <!-- Afficher les erreurs globales du formulaire -->
-            {% for error in formE.vars.errors %}
+            {% for error in form.vars.errors %}
                 <div class="alert alert-danger">{{ error.message }}</div>
             {% endfor %}
 
             <div class="row mb-3">
                 <div class="col-md-12">
-                    {{ form_row(formE.description) }}
+                    {{ form_row(form.description) }}
                 </div>
             </div>
 
             <div class="row mb-3">
                 <div class="col-md-12">
-                    {{ form_row(formE.local) }}
+                    {{ form_row(form.local) }}
                 </div>
             </div>
             <div class="row mb-3">
                 <div class="col-md-12">
-                    {{ form_row(formE.category) }}
+                    {{ form_row(form.category) }}
+                </div>
+            </div>
+            <div class="row mb-3">
+                <div class="col-md-12">
+                    {{ form_row(form.prix) }}
+                </div>
+            </div>
+            <div class="row mb-3">
+                <div class="col-md-12">
+                    {{ form_row(form.total_participants) }}
                 </div>
             </div>
 
             <div class="row mb-3">
                 <div class="col-md-12 text-center">
-                    {{ form_widget(formE.save, {'label': 'Create Event', 'attr': {'class': 'btn btn-dark'}}) }}
+                    {{ form_widget(form.save, {'label': 'Create Event', 'attr': {'class': 'btn btn-dark'}}) }}
 
                 </div>
             </div>
         </div>
-        {{ form_end(formE) }}
+        {{ form_end(form) }}
 
     </div>
     </div>
 <!-- *** Footer *** -->
-<footer>
-    <div class="container">
-        <div class="row">
-            <div class="col-lg-4">
-                <!-- Add content if needed -->
-            </div>
-            <div class="col-lg-12">
-                <div class="sub-footer">
-                    <div class="row">
-                        <div class="col-lg-3">
-                            <div class="logo"><span>Art<em>Xibition</em></span></div>
-                        </div>
 
-                        <div class="col-lg-3">
-                            <!-- Add content if needed -->
-                        </div>
-                    </div>
-                </div>
-            </div>
-        </div>
-    </div>
-</footer>
 
 <!-- Scripts -->
 <script src="{{ asset('assets/js/jquery-2.1.0.min.js') }}"></script>

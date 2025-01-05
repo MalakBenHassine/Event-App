@@ -1,13 +1,98 @@
 {% extends 'base.html.twig' %}
 
-{% block title %}Edit Local{% endblock %}
+{% block title %}Edit Venue{% endblock %}
 
 {% block body %}
-    <h1>Edit Local</h1>
+    <div class="page-heading-rent-venue">
+        <div class="container">
+            <div class="row">
+                <div class="col-lg-12">
+                    <h2>Edit Venue</h2>
+                </div>
+            </div>
+        </div>
+    </div>
 
-    {{ include('local/_form.html.twig', {'button_label': 'Update'}) }}
+    <div class="events-form" style="padding-top: 50px;">
+        <div class="container">
+            <!-- Formulaire pour la création de local -->
+            {{ form_start(form) }}
 
-    <a href="{{ path('app_local_index') }}">back to list</a>
+            <div class="row mb-3">
+                <div class="col-md-6">
+                    <div class="form-group">
+                        {{ form_label(form.name, 'Name') }}
+                        {{ form_widget(form.name, {'attr': {'class': 'form-control'}}) }}
+                        {% for error in form.name.vars.errors %}
+                            <div class="alert alert-danger">{{ error.message }}</div>
+                        {% endfor %}
+                    </div>
+                </div>
 
-    {{ include('local/_delete_form.html.twig') }}
+                <div class="col-md-6">
+                    <div class="form-group">
+                        {{ form_label(form.adr, 'Adress') }}
+                        {{ form_widget(form.adr, {'attr': {'class': 'form-control'}}) }}
+                        {% for error in form.adr.vars.errors %}
+                            <div class="alert alert-danger">{{ error.message }}</div>
+                        {% endfor %}
+                    </div>
+                </div>
+            </div>
+
+            <div class="row mb-3">
+                <!-- Prix avant la capacité -->
+                <div class="col-md-6">
+                    <div class="form-group">
+                        {{ form_label(form.price, 'Price') }}
+                        {{ form_widget(form.price, {'attr': {'class': 'form-control'}}) }}
+                        {% for error in form.price.vars.errors %}
+                            <div class="alert alert-danger">{{ error.message }}</div>
+                        {% endfor %}
+                    </div>
+                </div>
+
+                <div class="col-md-6">
+                    <div class="form-group">
+                        {{ form_label(form.capacite, 'Capacity') }}
+                        {{ form_widget(form.capacite, {'attr': {'class': 'form-control'}}) }}
+                        {% for error in form.capacite.vars.errors %}
+                            <div class="alert alert-danger">{{ error.message }}</div>
+                        {% endfor %}
+                    </div>
+                </div>
+            </div>
+
+            <div class="row mb-3">
+                <div class="col-md-6">
+                    <div class="form-group">
+                        {{ form_label(form.description, 'Description') }}
+                        {{ form_widget(form.description, {'attr': {'class': 'form-control'}}) }}
+                        {% for error in form.description.vars.errors %}
+                            <div class="alert alert-danger">{{ error.message }}</div>
+                        {% endfor %}
+                    </div>
+                </div>
+            </div>
+            <div class="form-group">
+                {{ form_label(form.isAvailable, 'Availibilty') }}
+                {{ form_widget(form.isAvailable) }}
+                {% for error in form.isAvailable.vars.errors %}
+                    <div class="alert alert-danger">{{ error.message }}</div>
+                {% endfor %}
+            </div>
+
+            <!-- Bouton pour enregistrer -->
+            <div class="row mb-3">
+                <div class="col-md-12 text-center">
+                    <button type="submit" class="btn btn-secondary">Save </button>
+                </div>
+            </div>
+
+            {{ form_end(form) }}
+
+            <!-- Lien de retour à la liste des locaux -->
+
+        </div>
+    </div>
 {% endblock %}

@@ -22,7 +22,7 @@
             <div class="card-body">
                 <h5 class="card-title text-center mb-3">Détails de l'événement</h5>
                 <p><strong>Date de l'événement :</strong> {{ event.date | date('Y-m-d') }}</p>
-                <p><strong>Lieu :</strong> {{ event.local }}</p>
+                <p><strong>Lieu :</strong> {{ event.local.name }}</p>
             </div>
         </div>
 
