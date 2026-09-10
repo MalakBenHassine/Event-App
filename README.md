@@ -1,21 +1,21 @@
-# Events_project — Gestion d'evenements (Symfony)
+# Event-App — Event Management (Symfony)
 
-Application web de gestion d'evenements developpee en equipe dans le cadre d'un projet academique, avec inscription et mise en correspondance des utilisateurs aux evenements.
+Web application for event management, built as a team for an academic project, with user registration and matching between users and events.
 
-## Fonctionnalites
+## Features
 
-- Creation et gestion d'evenements
-- Inscription et gestion des participants
-- Interfaces de mise en correspondance (matching) utilisateurs/evenements
-- Tests fonctionnels
+- Event creation and management
+- Participant registration and management
+- Matching interfaces between users and events
+- Functional tests
 
-## Stack technique
+## Tech stack
 
-- **Backend** : PHP, Symfony
-- **Frontend** : Twig, JavaScript, CSS
-- **Conteneurisation** : Docker
+- **Backend**: PHP, Symfony
+- **Frontend**: Twig, JavaScript, CSS
+- **Containerization**: Docker
 
-## Lancer le projet
+## Running the project
 
 ```bash
 git clone https://github.com/MalakBenHassine/Event-App.git
@@ -23,6 +23,6 @@ cd Event-App
 docker compose up --build
 ```
 
-## Contributeurs
+## Contributors
 
-Projet realise en equipe : Jesser Mdimegh, Malak Ben Hassine, Nourhene Ferchichi, Wassim Awled Sghair.
+Built as a team: Jesser Mdimegh, Malak Ben Hassine, Nourhene Ferchichi, Wassim Awled Sghair.
